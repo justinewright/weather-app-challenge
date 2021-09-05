@@ -21,7 +21,7 @@ extension Publishers {
         public typealias Output = CLLocationCoordinate2D
         public typealias Failure = Never
 
-        public func receive<S>(subscriber: S) where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input {
+        public func receive<S>(subscriber: S) where S: Subscriber, Self.Failure == S.Failure, Self.Output == S.Input {
             let subscription = LocationSubscription(subscriber: subscriber)
             subscriber.receive(subscription: subscription)
         }

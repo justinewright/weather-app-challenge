@@ -11,7 +11,7 @@ import Combine
 class MockWeatherApiClient: WeatherApiClientProtocol {
     @Published var weatherData: WeatherData
     private var cancellables = Set<AnyCancellable>()
-    let mockServer = PassthroughSubject<WeatherData, Error> ()
+    let mockServer = PassthroughSubject<WeatherData, Error>()
 
     init() {
         var daily: [Daily] = []
@@ -26,7 +26,7 @@ class MockWeatherApiClient: WeatherApiClientProtocol {
 
     func fetch(long: Double, lat: Double) {
         mockServer
-            .sink { error in
+            .sink {_ in
                 self.weatherData = self.getDefaultWeatherData()
             } receiveValue: { data in
                 print(data)

@@ -23,4 +23,3 @@ class LocationViewModel {
             .store(in: &cancellables)
     }
 }
-

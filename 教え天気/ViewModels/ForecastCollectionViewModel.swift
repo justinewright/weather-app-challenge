@@ -19,13 +19,12 @@ class ForecastCollectionViewModel {
     init(repository: Repository = Repository()) {
         self.repository = repository
         self.repository.$weatherForecast
-            .map{$0}
+            .map{ $0 }
             .assign(to: \.weatherForecast, on: self)
             .store(in: &cancellables)
-        
+
         for _ in 0..<forecastedDays {
             weatherForecast.append(WeatherModel.default)
         }
     }
-    
 }

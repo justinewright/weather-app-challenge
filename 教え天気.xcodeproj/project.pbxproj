@@ -40,6 +40,8 @@
 		2174358126E1087E007A0A60 /* OpenWeatherMapsApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2156A47E26DE35750034C984 /* OpenWeatherMapsApiClient.swift */; };
 		2174358626E11547007A0A60 /* mockData.json in Resources */ = {isa = PBXBuildFile; fileRef = 2174358526E11547007A0A60 /* mockData.json */; };
 		2174358726E1159B007A0A60 /* mockData.json in Resources */ = {isa = PBXBuildFile; fileRef = 2174358526E11547007A0A60 /* mockData.json */; };
+		21758CDB26E52A5200307629 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 21758CDA26E52A5200307629 /* .swiftlint.yml */; };
+		21758CDC26E52A5200307629 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 21758CDA26E52A5200307629 /* .swiftlint.yml */; };
 		2198BC9326D91F4D00711D22 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2198BC9226D91F4D00711D22 /* AppDelegate.swift */; };
 		2198BC9526D91F4D00711D22 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2198BC9426D91F4D00711D22 /* SceneDelegate.swift */; };
 		2198BC9726D91F4D00711D22 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2198BC9626D91F4D00711D22 /* ViewController.swift */; };
@@ -76,6 +78,7 @@
 		2174356D26E0F025007A0A60 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2174357526E0F11F007A0A60 /* MockWeatherApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWeatherApiClient.swift; sourceTree = "<group>"; };
 		2174358526E11547007A0A60 /* mockData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = mockData.json; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.json; };
+		21758CDA26E52A5200307629 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		2198BC8F26D91F4D00711D22 /* 教え天気.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "教え天気.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2198BC9226D91F4D00711D22 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2198BC9426D91F4D00711D22 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -191,6 +194,7 @@
 		2198BC8626D91F4D00711D22 = {
 			isa = PBXGroup;
 			children = (
+				21758CDA26E52A5200307629 /* .swiftlint.yml */,
 				2198BC9126D91F4D00711D22 /* 教え天気 */,
 				2174356A26E0F025007A0A60 /* ApiDataRetrievalTests */,
 				2198BC9026D91F4D00711D22 /* Products */,
@@ -285,6 +289,7 @@
 				2198BC8B26D91F4D00711D22 /* Sources */,
 				2198BC8C26D91F4D00711D22 /* Frameworks */,
 				2198BC8D26D91F4D00711D22 /* Resources */,
+				21758CD926E527DB00307629 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -337,6 +342,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21758CDC26E52A5200307629 /* .swiftlint.yml in Resources */,
 				2174358626E11547007A0A60 /* mockData.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,6 +351,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21758CDB26E52A5200307629 /* .swiftlint.yml in Resources */,
 				2198BC9F26D91F4E00711D22 /* LaunchScreen.storyboard in Resources */,
 				2174358726E1159B007A0A60 /* mockData.json in Resources */,
 				2198BC9C26D91F4E00711D22 /* Assets.xcassets in Resources */,
@@ -353,6 +360,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		21758CD926E527DB00307629 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2174356526E0F025007A0A60 /* Sources */ = {

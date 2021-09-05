@@ -90,9 +90,9 @@ class APIDataRetrievalTests: XCTestCase {
 
     override func setUp() {
         mockWeatherClientApi = MockWeatherApiClient()
-        repo = Repository(weatherApiClient:  mockWeatherClientApi)
+        repo = Repository(weatherApiClient: mockWeatherClientApi)
     }
-    
+
     func testSuccessfulApiCallReturnUpdatesRepositoryWeatherForecastWithMockedWeatherData() throws {
         let weatherData: WeatherData = load("mockData.json")
 
@@ -103,7 +103,7 @@ class APIDataRetrievalTests: XCTestCase {
         mockWeatherClientApi.fetch(long: 0, lat: 0)
         mockWeatherClientApi.mockServer.send(weatherData)
 
-        let updatedWeather = try `await` (observer)
+        let updatedWeather = try `await`(observer)
 
         XCTAssertEqual(updatedWeather.count, 1)
         let model = updatedWeather.last?.first
@@ -125,7 +125,7 @@ class APIDataRetrievalTests: XCTestCase {
         mockWeatherClientApi.fetch(long: 0, lat: 0)
         mockWeatherClientApi.mockServer.send(completion: .failure(WeatherError.thingsJustHappen))
 
-        let updatedWeather = try `await` (observer)
+        let updatedWeather = try `await`(observer)
 
         XCTAssertEqual(updatedWeather.count, 1)
         let model = updatedWeather.last?.first

@@ -17,7 +17,4 @@ class ViewController: UIViewController {
         view = mainView
         view.topColoured()
     }
-
-
 }
-

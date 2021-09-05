@@ -36,7 +36,6 @@ class ForecastCollectionView: UIView {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(collectionView)
 
-
         self.collectionView = collectionView
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
@@ -74,7 +73,7 @@ extension ForecastCollectionView: UICollectionViewDataSource, UICollectionViewDe
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.weatherForecast.count > 0 ? viewModel.forecastedDays : 0
+        return viewModel.weatherForecast.isEmpty ? viewModel.forecastedDays : 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

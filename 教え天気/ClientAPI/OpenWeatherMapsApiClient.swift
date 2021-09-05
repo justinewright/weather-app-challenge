@@ -43,7 +43,7 @@ class OpenWeatherMapsApiClient: WeatherApiClientProtocol {
                     return element.data
                 }
                 .decode(type: WeatherData.self, decoder: JSONDecoder())
-                .sink(receiveCompletion:   { error in
+                .sink(receiveCompletion: { error in
                     print("Subscription completed with error \(error)")
                 }, receiveValue: { self.weatherData = $0 }
                 )

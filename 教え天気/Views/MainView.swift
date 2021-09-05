@@ -141,10 +141,8 @@ class MainView: UIView {
     }
 
 }
-extension UIView
-{
-  func topColoured()
-  {
+extension UIView {
+  func topColoured() {
      let colouredTopBlack = UIView()
      addSubview(colouredTopBlack)
      colouredTopBlack.translatesAutoresizingMaskIntoConstraints = false
@@ -153,7 +151,7 @@ extension UIView
      NSLayoutConstraint.activate([
         colouredTopBlack.topAnchor.constraint(equalTo: topAnchor),
         colouredTopBlack.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-        colouredTopBlack.widthAnchor.constraint(equalTo: widthAnchor),
+        colouredTopBlack.widthAnchor.constraint(equalTo: widthAnchor)
     ])
   }
 }

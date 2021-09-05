@@ -8,7 +8,7 @@
 import Foundation
 
 extension Date {
-    
+
     func weekDay(unixTime: Double) -> String {
         let date = Date(timeIntervalSince1970: unixTime)
         let dateFormatter = DateFormatter()
@@ -23,7 +23,6 @@ extension Date {
         return dateFormatter.string(from: date)
     }
 
-
     func todayFormated() -> String {
         let date = Date()
         let dateFormatter = DateFormatter()
@@ -33,4 +32,3 @@ extension Date {
     }
 
 }
-

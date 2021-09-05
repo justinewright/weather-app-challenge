@@ -23,4 +23,3 @@ class TodaysAverageTemperatureViewModel {
             .store(in: &cancellables)
     }
 }
-

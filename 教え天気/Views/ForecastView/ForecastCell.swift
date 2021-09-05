@@ -87,7 +87,7 @@ private extension ForecastCell {
     }
 
     private func setupBackgroundImageView() {
-        backgroundImageView = UIImageView(frame: CGRect (x: 0, y: 0, width: 226, height: 226))
+        backgroundImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 226, height: 226))
         backgroundImageView.image = UIImage(named: "forecastCell")
         backgroundImageView.layer.shadowRadius = 2
         backgroundImageView.layer.shadowOffset = .init(width: 0, height: 5)
@@ -150,7 +150,7 @@ private extension ForecastCell {
 
     private func setupJapaneseWeekdayLabelConstraints() {
         NSLayoutConstraint.activate([
-            japaneseWeekdayLabel.centerXAnchor.constraint(equalTo: centerXAnchor,  constant: 60),
+            japaneseWeekdayLabel.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 60),
             japaneseWeekdayLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
