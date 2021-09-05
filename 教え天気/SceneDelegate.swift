@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  教え天気
 //
-//  Created by Justine Wright on 2021/09/05.
+//  Created by Justine Wright on 2021/08/27.
 //
 
 import UIKit
