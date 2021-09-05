@@ -5,8 +5,6 @@
 //  Created by Justine Wright on 2021/08/30.
 //
 
-import Foundation
-
 import UIKit
 import Combine
 
@@ -73,7 +71,7 @@ extension ForecastCollectionView: UICollectionViewDataSource, UICollectionViewDe
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.weatherForecast.isEmpty ? viewModel.forecastedDays : 0
+        return viewModel.weatherForecast.isEmpty ? 0 : viewModel.forecastedDays
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -83,8 +81,8 @@ extension ForecastCollectionView: UICollectionViewDataSource, UICollectionViewDe
         cell.setup(weatherModel: viewModel.weatherForecast[indexPath.row])
         return cell
     }
-
 }
+
 extension ForecastCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
      
