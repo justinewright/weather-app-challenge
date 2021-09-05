@@ -157,29 +157,3 @@ extension UIView
     ])
   }
 }
-
-struct IntegratedMainView: UIViewRepresentable {
-
-    func makeUIView(context: UIViewRepresentableContext<IntegratedMainView>) -> MainView {
-        return MainView()
-    }
-
-    func updateUIView(_ uiView: MainView, context: UIViewRepresentableContext<IntegratedMainView>) {}
-
-}
-
-struct MainViewViewa: View {
-
-    var body: some View {
-        IntegratedMainView()
-            .ignoresSafeArea()
-    }
-}
-
-struct MainViewViewa_Previews: PreviewProvider {
-    static var previews: some View {
-        IntegratedMainView()
-            .preferredColorScheme(.dark)
-            .previewLayout(.sizeThatFits)
-    }
-}

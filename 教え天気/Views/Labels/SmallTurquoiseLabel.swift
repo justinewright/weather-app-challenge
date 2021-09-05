@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SmallTurqoiseLabel: Label {
+class SmallGrayLabel: Label {
     override func initialize() {
         super.initialize()
         self.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 45)

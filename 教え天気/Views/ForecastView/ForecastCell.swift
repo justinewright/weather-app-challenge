@@ -13,7 +13,7 @@ class ForecastCell: UICollectionViewCell {
     private var weatherIconImageView = UIImageView()
     private var backgroundImageView: UIImageView!
     private var temperatureLabelStack: UIStackView!
-    private var lowTemperatureLabel: SmallTurqoiseLabel!
+    private var lowTemperatureLabel: SmallGrayLabel!
     private var highTemperatureLabel: MediumWhiteLabel!
 
     private var englishWeekdayLabel: MediumWhiteLabel!
@@ -58,7 +58,7 @@ class ForecastCell: UICollectionViewCell {
 
 private extension ForecastCell {
     private func setupLowTemperatureLabel() {
-        lowTemperatureLabel = SmallTurqoiseLabel()
+        lowTemperatureLabel = SmallGrayLabel()
         lowTemperatureLabel.text = "5°C"
     }
 
