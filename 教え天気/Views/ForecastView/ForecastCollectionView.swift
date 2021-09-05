@@ -8,7 +8,6 @@
 import Foundation
 
 import UIKit
-import SwiftUI
 import Combine
 
 class ForecastCollectionView: UIView {
@@ -96,45 +95,5 @@ extension ForecastCollectionView: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 10
-    }
-
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//        10
-//    }
-
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
-//    }
-}
-
-struct IntegratedForecastCollectionView: UIViewRepresentable {
-
-    func makeUIView(context: UIViewRepresentableContext<IntegratedForecastCollectionView>) -> ForecastCollectionView {
-        return ForecastCollectionView()
-    }
-
-    func updateUIView(_ uiView: ForecastCollectionView, context: UIViewRepresentableContext<IntegratedForecastCollectionView>) {}
-
-}
-
-struct ForecastCollectionViewa: View {
-
-    var body: some View {
-        ZStack {
-            Color.init(.black)
-            VStack {
-                IntegratedForecastCollectionView()
-            }.foregroundColor(.black)
-        }
-
-    }
-}
-
-struct ForecastCollectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            ForecastCollectionViewa()
-                .preferredColorScheme(.dark)
-        }
     }
 }

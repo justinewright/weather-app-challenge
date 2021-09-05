@@ -15,8 +15,7 @@ class ViewController: UIViewController {
         
         mainView = MainView()
         view = mainView
-        view.topColouredBlack()
-        // Do any additional setup after loading the view.
+        view.topColoured()
     }
 
 

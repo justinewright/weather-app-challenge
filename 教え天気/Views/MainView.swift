@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import SwiftUI
 import Combine
 
 class MainView: UIView {
@@ -144,7 +143,7 @@ class MainView: UIView {
 }
 extension UIView
 {
-  func topColouredBlack()
+  func topColoured()
   {
      let colouredTopBlack = UIView()
      addSubview(colouredTopBlack)

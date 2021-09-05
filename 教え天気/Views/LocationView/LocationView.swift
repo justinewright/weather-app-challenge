@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import SwiftUI
 import Combine
 
 class LocationView: MediumWhiteLabel {
@@ -50,47 +49,5 @@ class LocationView: MediumWhiteLabel {
             .receive(on: DispatchQueue.main)
             .sink { self.text = $0 }
             .store(in: &cancellables)
-    }
-}
-
-
-struct IntegratedLocationLabelView: UIViewRepresentable {
-
-    @Binding var text: NSMutableAttributedString
-
-    func makeUIView(context: Context) -> LocationView {
-        let bodyLabel = LocationView()
-        bodyLabel.textAlignment = .center
-        bodyLabel.sizeToFit()
-        return bodyLabel
-    }
-
-    func updateUIView(_ uiView: LocationView, context: Context) {
-        uiView.attributedText = text
-    }
-}
-
-struct LocationLabelView: View {
-
-    @State var text = NSMutableAttributedString(string: "Johannesburg, ZA")
-
-    var body: some View {
-        GeometryReader { _ in
-            VStack(alignment: .center) {
-                Rectangle()
-                    .frame(height: 45, alignment: .center)
-                    .overlay(IntegratedLocationLabelView(text: $text))
-            }
-        }
-    }
-}
-
-struct LocationLabelView_Previews: PreviewProvider {
-    static var previews: some View {
-        LocationLabelView()
-            .preferredColorScheme(.light)
-            .previewLayout(PreviewLayout.sizeThatFits)
-            .padding()
-            .previewDisplayName("Default preview")
     }
 }

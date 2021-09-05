@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 import UIKit
 
 class ForecastCell: UICollectionViewCell {
@@ -154,39 +153,5 @@ private extension ForecastCell {
             japaneseWeekdayLabel.centerXAnchor.constraint(equalTo: centerXAnchor,  constant: 60),
             japaneseWeekdayLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
-    }
-}
-
-
-struct IntegratedForecastCellView: UIViewRepresentable {
-
-    func makeUIView(context: UIViewRepresentableContext<IntegratedForecastCellView>) -> ForecastCell {
-        return ForecastCell()
-    }
-
-    func updateUIView(_ uiView: ForecastCell, context: UIViewRepresentableContext<IntegratedForecastCellView>) {}
-
-}
-
-struct ForecastCellView: View {
-
-    var body: some View {
-        GeometryReader { _ in
-            VStack(alignment: .center) {
-                RoundedRectangle(cornerRadius: 320 / 2)
-                    .foregroundColor(.blue)
-                    .frame(width: 226, height: 226, alignment: .center)
-                    .overlay(IntegratedForecastCellView())
-
-            }
-        }
-    }
-}
-
-struct ForecastCellView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForecastCellView()
-            .preferredColorScheme(.dark)
-            .previewLayout(.sizeThatFits)
     }
 }
