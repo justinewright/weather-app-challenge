@@ -64,7 +64,7 @@ extension LocationCollectionView: UICollectionViewDataSource, UICollectionViewDe
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: locationCellReuseIdentifier, for: indexPath) as? LocationCell else {
             return UICollectionViewCell()
         }
-        cell.setup(text: locations[indexPath.row])
+        cell.setup(text: indexPath.row > 0 ? locations[indexPath.row] : "Current Location")
         return cell
     }
 
