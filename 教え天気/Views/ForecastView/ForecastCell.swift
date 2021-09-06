@@ -91,7 +91,7 @@ private extension ForecastCell {
         backgroundImageView.image = UIImage(named: "forecastCell")
         backgroundImageView.layer.shadowRadius = 2
         backgroundImageView.layer.shadowOffset = .init(width: 0, height: 5)
-        backgroundImageView.layer.shadowColor = UIColor(.black).cgColor
+        backgroundImageView.layer.shadowColor = UIColor(ciColor: .black).cgColor
         backgroundImageView.layer.shadowOpacity = 0.5
         backgroundImageView.clipsToBounds = false
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false

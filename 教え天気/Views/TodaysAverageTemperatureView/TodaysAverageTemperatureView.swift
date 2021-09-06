@@ -8,7 +8,6 @@
 import Foundation
 
 import UIKit
-import SwiftUI
 import Combine
 
 class TodaysAverageTemperatureView: UIView {
