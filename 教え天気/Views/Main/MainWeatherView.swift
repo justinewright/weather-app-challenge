@@ -9,8 +9,7 @@ import Foundation
 import UIKit
 import Combine
 
-class MainView: UIView {
-
+class MainWeatherView: UIView {
     private var viewModel = MainViewModel()
     private var backgroundImageView: UIImageView!
     private var backgroundCharacterImageView: UIImageView!
@@ -18,12 +17,12 @@ class MainView: UIView {
     private var todaysAverageTemperatureView: TodaysAverageTemperatureView!
     private var forecastCollectionView: ForecastCollectionView!
     private var footerLabel: SmallWhiteLabel!
-
     private var footerText = "Daily"
 
     private var cancellables: Set<AnyCancellable> = []
 
-    override init(frame: CGRect) {
+    required init(viewModel: MainViewModel = MainViewModel()) {
+        self.viewModel = viewModel
         super.init(frame: .zero)
         setupView()
         setupBindings()

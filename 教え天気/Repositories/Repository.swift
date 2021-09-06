@@ -1,5 +1,5 @@
 //
-//  RepositoryServices.swift
+//  Repository.swift
 //  教え天気
 //
 //  Created by Justine Wright on 2021/08/31.
@@ -17,7 +17,7 @@ class Repository {
     private var locationManager: AnyCancellable!
     private var weatherApiClient: WeatherApiClientProtocol!
 
-    init(weatherApiClient: WeatherApiClientProtocol = OpenWeatherMapsApiClient()) {
+    init(weatherApiClient: WeatherApiClientProtocol = OpenWeatherMapsApiClient(), coordinates: CLLocationCoordinate2D? = nil) {
         self.weatherApiClient = weatherApiClient
         weatherApiClient.listen()
             .map{ weatherData in
@@ -26,8 +26,12 @@ class Repository {
             .assign(to: \.weatherForecast, on: self)
             .store(in: &cancellables)
 
+        if let coordinates = coordinates {
+            weatherApiClient.fetch(long: coordinates.longitude, lat: coordinates.latitude)
+        } else {
         locationManager = CLLocationManager.publishLocation()
             .sink(receiveValue: { self.onLocationUpdate(coordinates: $0) })
+        }
     }
 
     private func onLocationUpdate(coordinates: CLLocationCoordinate2D) {
