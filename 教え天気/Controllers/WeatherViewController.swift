@@ -15,6 +15,7 @@ class WeatherViewController: UIViewController {
         super.viewDidLoad()
         view = mainView
         view.topColoured()
+        view.clipsToBounds = true
     }
 
     init(viewModel: MainViewModel = MainViewModel()) {

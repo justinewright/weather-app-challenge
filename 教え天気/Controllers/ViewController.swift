@@ -94,7 +94,6 @@ class ViewController: UIPageViewController {
         locView.callback = { [self] (i) -> Void in
             navVC.dismiss(animated: true, completion: nil)
             self.goToSpecificPage(index: i, ofViewControllers: self.pages)
-            print(i)
         }
     }
 }
@@ -123,8 +122,9 @@ extension ViewController {
     }
 
     func style() {
+        pageControl.clipsToBounds = true
         pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.currentPageIndicatorTintColor = .black
+        pageControl.currentPageIndicatorTintColor = UIColor(named: "Light Turqoise")
         pageControl.pageIndicatorTintColor = .systemGray2
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = initialPage
@@ -228,13 +228,11 @@ extension ViewController: UITextFieldDelegate {
     @objc func addPressed() {
         searchTextField.endEditing(true)
         searchTextField.isHidden = false
-        print(searchTextField.text ?? "")
 
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchTextField.endEditing(true)
-        print(searchTextField.text!)
         DispatchQueue.main.async() {
             self.dataSource = nil
             self.dataSource = self

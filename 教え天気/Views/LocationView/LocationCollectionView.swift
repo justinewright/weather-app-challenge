@@ -13,14 +13,9 @@ class LocationCollectionView: UIView {
     private lazy var collectionView: UICollectionView! = nil
     var selectedCell = 0
     var callback: ((_ id: Int) -> Void)?
-//    private var viewModel: ForecastCollectionViewModel!
-//    private var cancellables: Set<AnyCancellable> = []
 
     required override init(frame: CGRect) {
         super.init(frame: .zero)
-
-        print("test")
-//        self.viewModel = viewModel
         setupView()
         setupBindings()
     }
@@ -30,7 +25,6 @@ class LocationCollectionView: UIView {
     }
 
     private func setupView() {
-        print("setup")
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: UIScreen.main.bounds, collectionViewLayout: layout)
@@ -50,17 +44,9 @@ class LocationCollectionView: UIView {
     }
 
     private func setupConstraints() {
-        print("constraining")
     }
 
     private func setupBindings() {
-//        viewModel.$weatherForecast
-//            .receive(on: DispatchQueue.main)
-//            .sink { _ in
-//
-//            } receiveValue: { _ in
-//                self.collectionView.reloadData()
-//            }.store(in: &cancellables)
     }
 
 }
@@ -83,7 +69,6 @@ extension LocationCollectionView: UICollectionViewDataSource, UICollectionViewDe
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        print(indexPath.row)
         callback?(indexPath.row)
         selectedCell = indexPath.row
 
