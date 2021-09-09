@@ -10,26 +10,31 @@ import CoreLocation
 import Combine
 
 class LocationRepo {
-    let userDefaults = UserDefaults.standard
-    @Published var dictionary: [String: CLLocationCoordinate2D] = [:]
-    let key = "locations"
-    let cities = PassthroughSubject<[String: CLLocationCoordinate2D], Never>()
+
+    static let shared = LocationRepo()
+    private let userDefaults = UserDefaults.standard
+    private var cityNames: [String] = []
+    private let key = "locations"
+    private let cities = PassthroughSubject<[String], Never>()
+
+    private init() {}
 
     func save() {
-        cities.send(dictionary)
-        userDefaults.set(dictionary, forKey: key)
+        userDefaults.set(cityNames, forKey: key)
+        cities.send(cityNames)
     }
 
     func load() {
-        dictionary = (userDefaults.object(forKey: key) as? [String: CLLocationCoordinate2D]) ?? [:]
+        cityNames = (userDefaults.object(forKey: key) as? [String]) ?? []
+        cities.send(cityNames)
     }
 
-    func addNewCity(name: String, coordinates: CLLocationCoordinate2D){
-        dictionary[name] = coordinates
+    func addNewCity(name: String) {
+        cityNames.append(name)
         save()
     }
 
-    func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
-        CLGeocoder().geocodeAddressString(address) { completion($0?.first?.location?.coordinate, $1) }
+    func observeChanges() -> AnyPublisher<[String], Never> {
+        cities.eraseToAnyPublisher()
     }
 }

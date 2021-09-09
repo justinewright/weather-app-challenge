@@ -11,14 +11,14 @@ import CoreLocation
 
 class PageListLocationViewModel {
 
-    private var locationRepo = LocationRepo()
+    private var locationRepo = LocationRepo.shared
 
-    @Published var cityDictionary: [String: CLLocationCoordinate2D] = [:]
+    @Published var cityDictionary: [String] = []
 
     private var cancellables: Set<AnyCancellable> = []
 
     init() {
-        self.locationRepo.$dictionary
+        self.locationRepo.observeChanges()
             .map{ $0 }
             .assign(to: \.cityDictionary, on: self)
             .store(in: &cancellables)

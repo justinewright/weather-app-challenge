@@ -1,47 +1,43 @@
 //
-//  CLLocationManager.swift
+//  SavedLocationsManager.swift
 //  教え天気
 //
-//  Created by Justine Wright on 2021/08/31.
+//  Created by Justine Wright on 2021/09/08.
 //
 
 import Foundation
 import CoreLocation
 import Combine
 
-extension CLLocationManager {
-    public static func publishLocation() -> AnyPublisher<CLLocationCoordinate2D, Never> {
-        Publishers.LocationPublisher().eraseToAnyPublisher()
-    }
+extension LocationRepo {
+    
 }
 
 extension Publishers {
 
-    public struct LocationPublisher: Publisher {
+    public struct SavedLocationPublisher: Publisher {
         public typealias Output = CLLocationCoordinate2D
         public typealias Failure = Never
 
         public func receive<S>(subscriber: S) where S: Subscriber, Self.Failure == S.Failure, Self.Output == S.Input {
-            let subscription = LocationSubscription(subscriber: subscriber)
+            let subscription = SavedLocationSubscription(subscriber: subscriber)
             subscriber.receive(subscription: subscription)
         }
 
-        final class LocationSubscription<S: Subscriber>: NSObject, CLLocationManagerDelegate, Subscription where S.Input == Output, S.Failure == Failure {
+        final class SavedLocationSubscription<S: Subscriber>: NSObject, CLLocationManagerDelegate, Subscription where S.Input == Output, S.Failure == Failure {
 
             private var subscriber: S?
             private var locationManager = CLLocationManager()
+            // todo make a delegate to save location
+
             init(subscriber: S) {
                 super.init()
                 self.subscriber = subscriber
 
-                locationManager.desiredAccuracy = kCLLocationAccuracyBest
-                locationManager.distanceFilter = kCLDistanceFilterNone
-                locationManager.delegate = self
             }
 
             func request(_ demand: Subscribers.Demand) {
-                locationManager.startUpdatingLocation()
-                locationManager.requestWhenInUseAuthorization()
+
             }
 
             func cancel() {
@@ -56,3 +52,4 @@ extension Publishers {
         }
     }
 }
+

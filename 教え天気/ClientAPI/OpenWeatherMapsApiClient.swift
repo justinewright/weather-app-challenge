@@ -37,6 +37,7 @@ class OpenWeatherMapsApiClient: WeatherApiClientProtocol {
                 .tryMap() { element -> Data in
                     guard let httpResponse = element.response as? HTTPURLResponse,
                           httpResponse.statusCode == 200 else {
+                        // todo alert
                         self.weatherData = self.getDefaultWeatherData()
                         throw URLError(.badServerResponse)
                     }

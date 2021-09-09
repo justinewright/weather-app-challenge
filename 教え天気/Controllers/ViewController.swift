@@ -7,41 +7,39 @@
 
 import UIKit
 import CoreLocation
+import Combine
 
 class ViewController: UIPageViewController {
 
     private var pages = [UIViewController]()
     private var searchTextField: UITextField!
-    private var locationRepo = LocationRepo()
+    private var locationRepo = LocationRepo.shared
+    private var cancellables: Set<AnyCancellable> = []
+    private var currentLocationName: String = ""
+    private var locationManager: AnyCancellable!
+    
+    private var cityNames: [String] = []
+    let cityNamesPublisher = PassthroughSubject<[String], Never>()
+
+    lazy var emptyView: UIViewController = {
+        let vc = UIViewController()
+        vc.view.backgroundColor = .black
+        return vc
+    }()
 
     private lazy var currentLocationVC: WeatherViewController = {
         let vc = WeatherViewController()
         return vc
+        
     }()
 
-    private lazy var londonVC: WeatherViewController = {
-        let i = 2
+    private func specificLocationVC(coordinates: CLLocationCoordinate2D) -> WeatherViewController {
         let vc = WeatherViewController(viewModel: MainViewModel(
                                         repository: Repository(weatherApiClient: OpenWeatherMapsApiClient(),
-                                                               coordinates: locationCoordinates[i])))
-        return  vc
-    }()
-
-    private lazy var johannesburgVC: WeatherViewController = {
-        let i = 1
-        let vc = WeatherViewController(viewModel: MainViewModel(
-                                        repository: Repository(weatherApiClient: OpenWeatherMapsApiClient(),
-                                                               coordinates: locationCoordinates[i])))
-        return  vc
-    }()
-
-    private func specificLocationVC(locationName: String) -> WeatherViewController {
-        let i = locations.firstIndex {$0 == locationName} ?? 0
-        let vc = WeatherViewController(viewModel: MainViewModel(
-                                        repository: Repository(weatherApiClient: OpenWeatherMapsApiClient(),
-                                                               coordinates: locationCoordinates[i])))
+                                                               coordinates: coordinates)))
         return  vc
     }
+
     lazy var showListButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         button.setImage(UIImage(systemName: "list.bullet"), for: .normal)
@@ -50,28 +48,23 @@ class ViewController: UIPageViewController {
         return button
     }()
 
-    @objc func presentList() {
-        DispatchQueue.main.async() {
-            self.dataSource = nil
-            self.dataSource = self
-            self.pageControl.numberOfPages = self.pages.count
-        }
-    }
-
-    let pageControl = UIPageControl()
-    let initialPage = 0
+    private let pageControl = UIPageControl()
+    private let initialPage = 0
 
     required init?(coder: NSCoder) {
         super.init(transitionStyle:.scroll, navigationOrientation: .horizontal, options: nil)
+    }
+    
+    func refresh() {
+        viewDidLoad()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupBindings()
     }
-
     @objc func presentLocationList() {
-
         let vc = UIViewController()
         let locView = LocationCollectionView()
         vc.view = locView
@@ -99,19 +92,18 @@ class ViewController: UIPageViewController {
 }
 
 extension ViewController {
-
     func setupView() {
         dataSource = self
         delegate = self
 
         view.addSubview(showListButton)
-
         pageControl.addTarget(self, action: #selector(pageControlTapped(_:)), for: .valueChanged)
-        pages = [currentLocationVC,
-                 johannesburgVC,
-                 londonVC]
+
+        // add currentLocations to location list
+        pages.append(emptyView)
         setViewControllers([pages[initialPage]], direction: .forward, animated: true, completion: nil)
 
+        locationRepo.load()
         searchTextField = UITextField(frame: CGRect(x: 20.0, y: 30.0, width: 100.0, height: 33.0))
         searchTextField.backgroundColor = .white
         searchTextField.borderStyle = .line
@@ -140,10 +132,66 @@ extension ViewController {
         ])
 
         view.bottomAnchor.constraint(equalToSystemSpacingBelow: pageControl.bottomAnchor, multiplier: 2).isActive = true
+        
         showListButton.translatesAutoresizingMaskIntoConstraints = false
         showListButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -42 / 2).isActive = true
         showListButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 42 / 2 - showListButton.bounds.height / 2 ).isActive = true
 
+    }
+
+    func setupBindings() {
+        locationRepo.observeChanges()
+            .receive(on: DispatchQueue.main)
+            .sink { cityNames in
+                self.updatePages(cityNames: cityNames)
+                self.refreshPages()
+                self.cityNamesPublisher.send(self.cityNames)
+            }
+            .store(in: &cancellables)
+
+        locationManager = CLLocationManager.publishLocation()
+            .sink(receiveValue: { coordinates in
+                coordinates.getCity { cityName, _ in
+                    print(coordinates)
+                    if let cityName = cityName {
+                        self.currentLocationName = cityName
+                        self.locationRepo.addNewCity(name: cityName)
+                        print("city name: \(cityName)")
+                        self.locationRepo.save()
+                    }
+                }
+            })
+    }
+
+    func updatePages(cityNames: [String]) {
+        print("updating pages")
+        var dictionary: [String: CLLocationCoordinate2D] = [:]
+        for name in cityNames {
+            name.getCoordinate(completion: { coordinates, _ in
+                if let coordinates = coordinates {
+                    dictionary[name] = coordinates
+                }
+            })
+        }
+        print("updating pages \(dictionary)")
+        updateCurrentLocationVC(dictionary: dictionary, forCurrentLocation: true)
+        updateCurrentLocationVC(dictionary: dictionary, forCurrentLocation: false)
+    }
+
+    func updateCurrentLocationVC(dictionary: [String: CLLocationCoordinate2D], forCurrentLocation: Bool) {
+        let filteredDictionary = forCurrentLocation ? dictionary.filter {$0.key == currentLocationName} :  dictionary.filter {$0.key != currentLocationName}
+        for (locationName, coordinates) in filteredDictionary {
+            pages.append(specificLocationVC(coordinates: coordinates))
+            cityNames.append(locationName)
+        }
+    }
+
+    func refreshPages() {
+        DispatchQueue.main.async {
+            self.dataSource = nil
+            self.dataSource = self
+            self.pageControl.numberOfPages = self.pages.count
+        }
     }
 }
 
@@ -171,6 +219,7 @@ extension ViewController: UIPageViewControllerDataSource {
             return pages.first
         }
     }
+
 }
 
 // MARK: - Delegates
@@ -228,16 +277,17 @@ extension ViewController: UITextFieldDelegate {
     @objc func addPressed() {
         searchTextField.endEditing(true)
         searchTextField.isHidden = false
-
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchTextField.endEditing(true)
+
         DispatchQueue.main.async() {
             self.dataSource = nil
             self.dataSource = self
             self.pageControl.numberOfPages = self.pages.count
         }
+
         return true
     }
 
@@ -252,11 +302,19 @@ extension ViewController: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         searchTextField.isHidden = true
-//        if let city = searchTextField.text {
-//            if let newVC = specificLocationVC(locationName: city) {
-//                pages.append(newVC)
-//            }
-//        }
+        print("End of edit")
+        if let city = searchTextField.text {
+            print ("adding \(city)")
+            city.getCoordinate { coordinates, error in
+                if let error = error {
+                    print("error adding: \(error)")
+                }
+                if coordinates != nil  {
+                    self.locationRepo.addNewCity(name: city)
+                }
+            }
+        }
         searchTextField.text = ""
     }
+
 }

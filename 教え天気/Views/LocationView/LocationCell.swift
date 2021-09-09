@@ -24,6 +24,11 @@ class LocationCell: UICollectionViewCell {
         label.text = "Hello"
         label.sizeToFit()
         self.contentView.addSubview(label)
+        backgroundColor = .gray
+        setupConstraints()
+    }
+
+    private func setupConstraints() {
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: self.contentView.topAnchor),
@@ -31,13 +36,6 @@ class LocationCell: UICollectionViewCell {
             label.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             label.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor)
         ])
-        backgroundColor = .gray
-//        self.bounds = CGRect(x: 0, y: 0 , width: 300, height: 30)
-//        setupConstraints()
-    }
-
-    private func setupConstraints() {
-//        labe
     }
 
     public func setup(text: String) {

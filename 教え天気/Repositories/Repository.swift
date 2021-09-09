@@ -36,7 +36,6 @@ class Repository {
 
     private func onLocationUpdate(coordinates: CLLocationCoordinate2D) {
         weatherApiClient.fetch(long: coordinates.longitude, lat: coordinates.latitude)
-        locationManager.cancel()
     }
 
     private func parseJSON(weatherData: WeatherData) -> [WeatherModel] {
