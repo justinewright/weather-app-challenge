@@ -10,8 +10,8 @@ import CoreLocation
 import Combine
 
 extension CLLocationCoordinate2D {
-    func getCity(completion: @escaping (_ city: String?, _ error: Error?) -> Void ) {
-        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: self.latitude, longitude: self.longitude)) { completion("\($0?.first?.locality), \($0?.first?.country)", $1) }
+    func getCity(completion: @escaping (_ city: String?,_ country: String?, _ error: Error?) -> Void ) {
+        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: self.latitude, longitude: self.longitude)) { completion($0?.first?.locality, $0?.first?.country, $1) }
     }
 }
 

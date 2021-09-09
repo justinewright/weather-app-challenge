@@ -14,12 +14,22 @@ class ViewController: UIPageViewController {
     private var pages = [UIViewController]()
     private var searchTextField: UITextField!
     private var locationRepo = LocationRepo.shared
+
     private var cancellables: Set<AnyCancellable> = []
     private var currentLocationName: String = ""
     private var locationManager: AnyCancellable!
-    
-    private var cityNames: [String] = []
+    private var repoWatcher: AnyCancellable!
+
+    private var isLoading = true
+    private var doneLoading =  PassthroughSubject<Bool, Never>()
+    private var addedCityNames: [String] = []
     let cityNamesPublisher = PassthroughSubject<[String], Never>()
+
+    lazy var loadingScreen: UINavigationController = {
+        let navVC = UINavigationController(rootViewController: emptyView)
+        navVC.modalPresentationStyle = .overFullScreen
+        return navVC
+    }()
 
     lazy var emptyView: UIViewController = {
         let vc = UIViewController()
@@ -64,6 +74,7 @@ class ViewController: UIPageViewController {
         setupView()
         setupBindings()
     }
+
     @objc func presentLocationList() {
         let vc = UIViewController()
         let locView = LocationCollectionView()
@@ -79,15 +90,24 @@ class ViewController: UIPageViewController {
         add.tintColor = .white
         vc.navigationItem.rightBarButtonItem = add
         vc.view.addSubview(searchTextField)
+
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
         searchTextField.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
         searchTextField.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
-        searchTextField.placeholder = "Enter City Name"
+        searchTextField.placeholder = "<City name>, <Country name>"
+        searchTextField.isHidden = true
 
-        locView.callback = { [self] (i) -> Void in
+        locView.callback = { _ -> Void in
             navVC.dismiss(animated: true, completion: nil)
-            self.goToSpecificPage(index: i, ofViewControllers: self.pages)
         }
+    }
+
+    func presentLoadingScreen() {
+        present(loadingScreen, animated: false, completion: nil)
+    }
+    
+    func hideLoadingScreen() {
+        loadingScreen.dismiss(animated: false, completion: nil)
     }
 }
 
@@ -99,16 +119,13 @@ extension ViewController {
         view.addSubview(showListButton)
         pageControl.addTarget(self, action: #selector(pageControlTapped(_:)), for: .valueChanged)
 
-        // add currentLocations to location list
-        pages.append(emptyView)
-        setViewControllers([pages[initialPage]], direction: .forward, animated: true, completion: nil)
-
-        locationRepo.load()
         searchTextField = UITextField(frame: CGRect(x: 20.0, y: 30.0, width: 100.0, height: 33.0))
         searchTextField.backgroundColor = .white
         searchTextField.borderStyle = .line
         searchTextField.delegate = self
         searchTextField.isHidden = true
+        presentLoadingScreen()
+        locationRepo.load()
         setupConstraints()
         style()
     }
@@ -140,49 +157,51 @@ extension ViewController {
     }
 
     func setupBindings() {
-        locationRepo.observeChanges()
-            .receive(on: DispatchQueue.main)
-            .sink { cityNames in
-                self.updatePages(cityNames: cityNames)
-                self.refreshPages()
-                self.cityNamesPublisher.send(self.cityNames)
-            }
-            .store(in: &cancellables)
+        setupLocalRepoBind()
 
         locationManager = CLLocationManager.publishLocation()
             .sink(receiveValue: { coordinates in
-                coordinates.getCity { cityName, _ in
-                    print(coordinates)
-                    if let cityName = cityName {
-                        self.currentLocationName = cityName
-                        self.locationRepo.addNewCity(name: cityName)
-                        print("city name: \(cityName)")
-                        self.locationRepo.save()
+                coordinates.getCity { cityName, countryName, _ in
+                    if let cityName = cityName, let countryName = countryName {
+                        self.currentLocationName = "\(cityName), \(countryName)"
+                        self.locationRepo.addNewCity(name: "\(cityName), \(countryName)")
+                        print("weather change")
                     }
                 }
             })
     }
 
-    func updatePages(cityNames: [String]) {
-        print("updating pages")
-        var dictionary: [String: CLLocationCoordinate2D] = [:]
-        for name in cityNames {
-            name.getCoordinate(completion: { coordinates, _ in
-                if let coordinates = coordinates {
-                    dictionary[name] = coordinates
-                }
-            })
-        }
-        print("updating pages \(dictionary)")
-        updateCurrentLocationVC(dictionary: dictionary, forCurrentLocation: true)
-        updateCurrentLocationVC(dictionary: dictionary, forCurrentLocation: false)
+    func setupLocalRepoBind() {
+        locationRepo.observeChanges()
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { cityNames in
+                self.updatePages(cityNames: cityNames)
+                print("repo change")
+            }
+            .store(in: &cancellables)
     }
 
-    func updateCurrentLocationVC(dictionary: [String: CLLocationCoordinate2D], forCurrentLocation: Bool) {
-        let filteredDictionary = forCurrentLocation ? dictionary.filter {$0.key == currentLocationName} :  dictionary.filter {$0.key != currentLocationName}
-        for (locationName, coordinates) in filteredDictionary {
-            pages.append(specificLocationVC(coordinates: coordinates))
-            cityNames.append(locationName)
+    func updatePages(cityNames: [String]) {
+        DispatchQueue.main.async { [self] in
+            print(addedCityNames)
+            for name in cityNames.filter({ !addedCityNames.contains($0) }) {
+                name.getCoordinate(completion: { [self] coordinates, _ in
+                    if let coordinates = coordinates {
+                        print("updatin new \(name)")
+                        print("updatin currentlox \(currentLocationName)")
+                        if name == currentLocationName {
+                            print("bingo")
+                        }
+                        pages.append(specificLocationVC(coordinates: coordinates))
+                        addedCityNames.append(name)
+                    }
+                    refreshPages()
+                    self.cityNamesPublisher.send(self.addedCityNames)
+                    setViewControllers([pages[initialPage]], direction: .forward, animated: true, completion: nil)
+                    hideLoadingScreen()
+                    cancellables.forEach { $0.cancel() }
+                })}
         }
     }
 
@@ -295,7 +314,7 @@ extension ViewController: UITextFieldDelegate {
         if textField.text != "" {
             return true
         } else {
-            textField.placeholder = "Enter City Name"
+            textField.placeholder = "<City name>, <Country name>"
             return false
         }
     }
@@ -310,6 +329,7 @@ extension ViewController: UITextFieldDelegate {
                     print("error adding: \(error)")
                 }
                 if coordinates != nil  {
+                    self.setupLocalRepoBind()
                     self.locationRepo.addNewCity(name: city)
                 }
             }

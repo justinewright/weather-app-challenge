@@ -55,6 +55,7 @@
 		2198BC9C26D91F4E00711D22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2198BC9B26D91F4E00711D22 /* Assets.xcassets */; };
 		2198BC9F26D91F4E00711D22 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2198BC9D26D91F4E00711D22 /* LaunchScreen.storyboard */; };
 		2198BCAC26D9276D00711D22 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2198BCAB26D9276D00711D22 /* WeatherModel.swift */; };
+		21B4E02226EA11A900E1EB49 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B4E02126EA11A900E1EB49 /* LoadingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +101,7 @@
 		2198BC9E26D91F4E00711D22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2198BCA026D91F4E00711D22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2198BCAB26D9276D00711D22 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
+		21B4E02126EA11A900E1EB49 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +125,7 @@
 		214B64F426E5EAA60055EF27 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				21B4E02126EA11A900E1EB49 /* LoadingViewController.swift */,
 				2198BC9626D91F4D00711D22 /* WeatherViewController.swift */,
 				214B64F526E5EAC10055EF27 /* ViewController.swift */,
 			);
@@ -442,6 +445,7 @@
 				214B650326E61F420055EF27 /* LocationData.swift in Sources */,
 				216FCF9226DD2B55008CD449 /* ForecastCollectionViewModel.swift in Sources */,
 				2156A45F26DE1E990034C984 /* WeatherApiClientProtocol.swift in Sources */,
+				21B4E02226EA11A900E1EB49 /* LoadingViewController.swift in Sources */,
 				214B64F826E5EB3F0055EF27 /* LocationCollectionView.swift in Sources */,
 				216FCF8E26DD06EC008CD449 /* SmallTurquoiseLabel.swift in Sources */,
 				2174356426E0CD87007A0A60 /* MainViewModel.swift in Sources */,
