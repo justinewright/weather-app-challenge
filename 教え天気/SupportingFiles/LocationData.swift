@@ -1,17 +1,17 @@
 //
 //  LocationData.swift
-//  教え天気
+//  教え天気(1)
 //
-//  Created by Justine Wright on 2021/09/06.
+//  Created by Justine Wright on 2021/09/14.
 //
 
 import Foundation
 import CoreLocation
 
 let locations: [String] = [
-    "Tokyo",
-    "Johannesburg",
-    "London"
+    "Taito, Japan",
+    "Johannesburg, South Africa",
+    "London, United Kingdom"
 ]
 
 let locationCoordinates: [CLLocationCoordinate2D] = [
