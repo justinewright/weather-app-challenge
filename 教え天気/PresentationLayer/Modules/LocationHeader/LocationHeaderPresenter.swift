@@ -7,28 +7,24 @@
 //
 
 import Foundation
-import UIKit
 
 class LocationHeaderPresenter: ViewToPresenterLocationHeaderProtocol {
-
     // MARK: Properties
     var view: PresenterToViewLocationHeaderProtocol?
     var interactor: PresenterToInteractorLocationHeaderProtocol?
     var router: PresenterToRouterLocationHeaderProtocol?
 
+    func updateView() {
+        interactor?.fetchAddress()
+    }
 }
 
 extension LocationHeaderPresenter: InteractorToPresenterLocationHeaderProtocol {
-    func updateLocation(withAddress address: String) {
-        view?.refresh(data: address)
+    func addressFetched(address: String) {
+        view?.showAddress(withAddress: address)
     }
 
-    var createHeaderLabel: UILabel {
-        let headerLabel = UILabel().White.SystemFont18
-        headerLabel.textAlignment = .center
-        headerLabel.backgroundColor = UIColor(named: "Light Turqoise")
-        headerLabel.text = ""
-        return headerLabel
+    func addressFetchedFailed(message address: String) {
+        // popup for error
     }
-
 }

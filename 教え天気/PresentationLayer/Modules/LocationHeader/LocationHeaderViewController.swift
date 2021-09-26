@@ -9,15 +9,12 @@
 import UIKit
 
 class LocationHeaderViewController: UIViewController {
-    private var locationHeaderLabel: UILabel!
-    private var locationString = ""
 
+    // MARK: - Initialization
     init() {
+        locationHeaderLabel = UILabel()
         super.init(nibName: nil, bundle: nil)
-        locationHeaderLabel = UILabel().White.SystemFont18
-        locationHeaderLabel.textAlignment = .center
-        locationHeaderLabel.backgroundColor = UIColor(named: "Light Turqoise")
-        locationHeaderLabel.text = locationString
+        presenter?.updateView()
     }
 
     required init?(coder: NSCoder) {
@@ -29,17 +26,22 @@ class LocationHeaderViewController: UIViewController {
         super.viewDidLoad()
         setupView()
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+        setupView()
+    }
+
     // MARK: - Properties
     var presenter: ViewToPresenterLocationHeaderProtocol?
-
+    private var locationHeaderLabel: UILabel!
+    private var addressString: String = ""
+    
     private func setupView() {
-        
-        locationHeaderLabel = presenter?.createHeaderLabel
-        locationHeaderLabel.text = locationString
         self.view.addSubview(locationHeaderLabel)
-
+        presenter?.updateView()
         setupConstraints()
+        applyStyle()
     }
 
     private func setupConstraints() {
@@ -51,13 +53,18 @@ class LocationHeaderViewController: UIViewController {
             locationHeaderLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+
+    private func applyStyle() {
+        locationHeaderLabel = UILabel().White.SystemFont18
+        locationHeaderLabel.textAlignment = .center
+        locationHeaderLabel.backgroundColor = UIColor(named: "Light Turqoise")
+        self.locationHeaderLabel.text = addressString
+    }
 }
 
+// MARK: - PresenterToView Protocol
 extension LocationHeaderViewController: PresenterToViewLocationHeaderProtocol {
-    func refresh(data address: String) {
-        DispatchQueue.main.async { [self] in
-            locationString = address
-            locationHeaderLabel.text = locationString
-        }
+    func showAddress(withAddress address: String) {
+        self.addressString = address
     }
 }

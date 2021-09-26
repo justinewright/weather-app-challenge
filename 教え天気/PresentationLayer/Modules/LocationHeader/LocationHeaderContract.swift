@@ -11,7 +11,7 @@ import UIKit
 
 // MARK: View Output (Presenter -> View)
 protocol PresenterToViewLocationHeaderProtocol {
-    func refresh(data address: String)
+    func showAddress(withAddress address: String)
 }
 
 // MARK: View Input (View -> Presenter)
@@ -20,20 +20,19 @@ protocol ViewToPresenterLocationHeaderProtocol {
     var view: PresenterToViewLocationHeaderProtocol? { get set }
     var interactor: PresenterToInteractorLocationHeaderProtocol? { get set }
     var router: PresenterToRouterLocationHeaderProtocol? { get set }
-
-    var createHeaderLabel: UILabel { get }
+    func updateView()
 }
 
 // MARK: Interactor Input (Presenter -> Interactor)
 protocol PresenterToInteractorLocationHeaderProtocol {
-    
     var presenter: InteractorToPresenterLocationHeaderProtocol? { get set }
-    var addressPublisher: WeatherEntitiesRepositoryAddressPublisher? {get set}
+    func fetchAddress()
 }
 
 // MARK: Interactor Output (Interactor -> Presenter)
 protocol InteractorToPresenterLocationHeaderProtocol {
-    func updateLocation(withAddress address: String)
+    func addressFetched(address: String)
+    func addressFetchedFailed(message: String)
 }
 
 // MARK: Router Input (Presenter -> Router)

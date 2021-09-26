@@ -12,23 +12,8 @@ import UIKit
 class LocationHeaderRouter: PresenterToRouterLocationHeaderProtocol {
     
     // MARK: Static methods
-    static func createModule() -> UIViewController {
-        
-        let viewController = LocationHeaderViewController()
-
-        let presenter: ViewToPresenterLocationHeaderProtocol & InteractorToPresenterLocationHeaderProtocol =
-            LocationHeaderPresenter()
-        
-        viewController.presenter = presenter
-        viewController.presenter?.router = LocationHeaderRouter()
-        viewController.presenter?.view = viewController
-        viewController.presenter?.interactor = LocationHeaderInteractor()
-        viewController.presenter?.interactor?.presenter = presenter
-        viewController.presenter?.interactor?.addressPublisher = WeatherEntitiesRepository(lat: locationCoordinates[0].latitude, lon: locationCoordinates[0].longitude)
-        
-        return viewController
-    }
-    static func createModule(weatherEntitiesRepository: WeatherEntitiesRepository) -> UIViewController {
+    
+    static func createModule(repo: WeatherEntitiesRepositoryAddressProtocol) -> UIViewController {
 
         let viewController = LocationHeaderViewController()
 
@@ -38,9 +23,8 @@ class LocationHeaderRouter: PresenterToRouterLocationHeaderProtocol {
         viewController.presenter = presenter
         viewController.presenter?.router = LocationHeaderRouter()
         viewController.presenter?.view = viewController
-        viewController.presenter?.interactor = LocationHeaderInteractor()
+        viewController.presenter?.interactor = LocationHeaderInteractor(repo: repo)
         viewController.presenter?.interactor?.presenter = presenter
-        viewController.presenter?.interactor?.addressPublisher = weatherEntitiesRepository
 
         return viewController
     }

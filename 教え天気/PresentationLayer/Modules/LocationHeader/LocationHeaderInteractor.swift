@@ -13,21 +13,13 @@ class LocationHeaderInteractor: PresenterToInteractorLocationHeaderProtocol {
 
     // MARK: Properties
     var presenter: InteractorToPresenterLocationHeaderProtocol?
-    var addressPublisher: WeatherEntitiesRepositoryAddressPublisher? {
-        didSet(addressPub) {
-            bindAddressPublisher()
-        }
+    private var repo: WeatherEntitiesRepositoryAddressProtocol
+
+    init(repo: WeatherEntitiesRepositoryAddressProtocol) {
+        self.repo = repo
     }
 
-    private var cancellables: Set<AnyCancellable> = []
-
-    init() {}
-
-    private func bindAddressPublisher() {
-        addressPublisher?.addressPub()
-            .sink(receiveValue: { address in
-                self.presenter?.updateLocation(withAddress: address)
-            }).store(in: &cancellables)
-
+    func fetchAddress() {
+        presenter?.addressFetched(address: repo.fetch())
     }
 }
