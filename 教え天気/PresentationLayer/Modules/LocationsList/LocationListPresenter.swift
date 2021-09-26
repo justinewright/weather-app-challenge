@@ -6,7 +6,7 @@
 //  
 //
 
-import UIKit
+import Foundation
 
 class LocationListPresenter: ViewToPresenterLocationListProtocol {
 
@@ -15,37 +15,30 @@ class LocationListPresenter: ViewToPresenterLocationListProtocol {
     var interactor: PresenterToInteractorLocationListProtocol?
     var router: PresenterToRouterLocationListProtocol?
 
-    func refresh() {
+    func addAddress(_ address: String) {}
+
+    func updateView() {
         interactor?.fetchAddresses()
     }
 
-    lazy var addButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        button.tintColor = .black
-        button.layer.cornerRadius = 20
-
-        button.setTitle("+", for: .normal)
-        button.setTitleColor(.lightGray, for: .normal)
-
-        button.titleLabel?.textAlignment = .center
-        button.addTarget(self, action: #selector(addLocation), for: .touchUpInside)
-        return button
-    }()
-
-    func addAddress(_ address: String) {
-        interactor?.addAddress(address)
+    @objc func addLocationButtonPressed() {
+        router?.presentLocationSearcher(rootView: view!, completion: { address in
+            DispatchQueue.main.async {
+            
+            self.interactor?.addAddress(address)
+            }
+        })
     }
 
-    @objc func addLocation() {
-        if let castedViewController = view as? LocationListViewController {
-            router?.locationSearcher(vc: castedViewController)
-        }
-    }
 }
 
 extension LocationListPresenter: InteractorToPresenterLocationListProtocol {
-    func update(locationAddresses: [String]) {
-        view?.refresh(locations: locationAddresses)
+    func fetchedAddresses(locationAddresses: [String]) {
+        view?.showLocations(withAddresses: locationAddresses)
     }
-    
+
+    func fetchedAddressesFailed(message: String) {
+        // something
+    }
+
 }

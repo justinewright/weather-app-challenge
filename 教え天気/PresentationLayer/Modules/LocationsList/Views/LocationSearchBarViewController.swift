@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+
 class LocationSearchBarViewController: UIViewController {
 
     private lazy var searchBar = UISearchBar()
@@ -69,7 +70,6 @@ extension LocationSearchBarViewController: UISearchBarDelegate, MKLocalSearchCom
         }
 
 }
-
 
 extension LocationSearchBarViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {

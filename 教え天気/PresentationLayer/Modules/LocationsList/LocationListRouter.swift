@@ -10,9 +10,10 @@ import Foundation
 import UIKit
 
 class LocationListRouter: PresenterToRouterLocationListProtocol {
-
-    func locationSearcher(vc: LocationListViewController) {
-
+    func presentLocationSearcher(rootView: PresenterToViewLocationListProtocol, completion: @escaping (String) -> Void) {
+        guard let rootView = rootView as? UIViewController else {
+            return
+        }
         let searchBar = LocationSearchBarViewController()
         searchBar.title = "Add Location"
 
@@ -21,16 +22,14 @@ class LocationListRouter: PresenterToRouterLocationListProtocol {
         navVC.navigationBar.backgroundColor = .black
         navVC.navigationBar.tintColor = .white
 
-        vc.present(navVC, animated: true, completion: nil)
+        rootView.present(navVC, animated: true, completion: nil)
 
         searchBar.callback = { (address, _) -> Void in
-            vc.presenter?.addAddress(address)
-            refreshMainView = true
             navVC.dismiss(animated: true, completion: nil)
+            completion(address)
         }
     }
 
-    
     // MARK: Static methods
     static func createModule() -> UIViewController {
         

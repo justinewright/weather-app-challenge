@@ -65,7 +65,6 @@ extension LocationsCollectionView: UICollectionViewDataSource, UICollectionViewD
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: locationCellReuseIdentifier, for: indexPath) as? LocationCell else {
             return UICollectionViewCell()
         }
-        print(addresses)
         cell.setup(text: addresses[indexPath.row])
         return cell
     }

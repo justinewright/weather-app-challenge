@@ -9,16 +9,24 @@
 import Foundation
 
 class LocationListInteractor: PresenterToInteractorLocationListProtocol {
-    func addAddress(_ address: String) {
-        addressRepository.addNewAddress(name: address)
-        presenter?.update(locationAddresses: addressRepository.addresses)
-    }
-
-    func fetchAddresses() {
-        presenter?.update(locationAddresses: addressRepository.addresses)
-    }
 
     // MARK: Properties
     var presenter: InteractorToPresenterLocationListProtocol?
-    private let addressRepository = AddressRepository()
+    private var dbAddressInteractor: LocationListToDatabase = Database.shared
+
+    init() {
+
+    }
+
+    func addAddress(_ address: String) {
+        DispatchQueue.main.async { [self] in
+            dbAddressInteractor.addAddress(address)
+            presenter?.fetchedAddresses(locationAddresses:  dbAddressInteractor.fetchAddresses())
+        }
+    }
+
+    func fetchAddresses() {
+        presenter?.fetchedAddresses(locationAddresses:  dbAddressInteractor.fetchAddresses())
+    }
+
 }
