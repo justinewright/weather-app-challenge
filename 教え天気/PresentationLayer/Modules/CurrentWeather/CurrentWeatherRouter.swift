@@ -9,26 +9,11 @@
 import Foundation
 import UIKit
 
+//TODO: - make default weatherEntitiesRepo
 class CurrentWeatherRouter: PresenterToRouterCurrentWeatherProtocol {
     
     // MARK: Static methods
-    static func createModule() -> UIViewController {
-        
-        let viewController = CurrentWeatherViewController()
-        
-        let presenter: ViewToPresenterCurrentWeatherProtocol & InteractorToPresenterCurrentWeatherProtocol = CurrentWeatherPresenter()
-        
-        viewController.presenter = presenter
-        viewController.presenter?.router = CurrentWeatherRouter()
-        viewController.presenter?.view = viewController
-        viewController.presenter?.interactor = CurrentWeatherInteractor()
-        viewController.presenter?.interactor?.presenter = presenter
-        viewController.presenter?.interactor?.currentWeatherPublisher = WeatherEntitiesRepository(lat: locationCoordinates[0].latitude, lon: locationCoordinates[0].longitude)
-        
-        return viewController
-    }
-
-    static func createModule(weatherEntitiesRepository: WeatherEntitiesRepository) -> UIViewController {
+    static func createModule(repo: WeatherEntitiesRepositoryCurrentWeatherPublisher) -> UIViewController {
 
         let viewController = CurrentWeatherViewController()
 
@@ -37,9 +22,8 @@ class CurrentWeatherRouter: PresenterToRouterCurrentWeatherProtocol {
         viewController.presenter = presenter
         viewController.presenter?.router = CurrentWeatherRouter()
         viewController.presenter?.view = viewController
-        viewController.presenter?.interactor = CurrentWeatherInteractor()
+        viewController.presenter?.interactor = CurrentWeatherInteractor(weatherEntitiesRepository: repo)
         viewController.presenter?.interactor?.presenter = presenter
-        viewController.presenter?.interactor?.currentWeatherPublisher = weatherEntitiesRepository
         
         return viewController
     }

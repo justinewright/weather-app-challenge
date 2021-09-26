@@ -46,7 +46,7 @@ class CurrentWeatherViewController: UIViewController {
 }
 
 extension CurrentWeatherViewController: PresenterToViewCurrentWeatherProtocol{
-    func refresh(data currentWeather: CurrentWeather) {
+    func showCurrentWeather(withCurrentWeather currentWeather: CurrentWeather) {
         DispatchQueue.main.async {
             self.currentWeatherView.update(currentWeather: currentWeather)
         }

@@ -11,7 +11,7 @@ import UIKit
 
 // MARK: View Output (Presenter -> View)
 protocol PresenterToViewCurrentWeatherProtocol {
-    func refresh(data currentWeather: CurrentWeather)
+    func showCurrentWeather(withCurrentWeather currentWeather: CurrentWeather)
 }
 
 // MARK: View Input (View -> Presenter)
@@ -20,21 +20,22 @@ protocol ViewToPresenterCurrentWeatherProtocol {
     var view: PresenterToViewCurrentWeatherProtocol? { get set }
     var interactor: PresenterToInteractotCurrentWeatherProtocol? { get set }
     var router: PresenterToRouterCurrentWeatherProtocol? { get set }
+
+    func updateView()
 }
 
 // MARK: Interactor Input (Presenter -> Interactor)
 protocol PresenterToInteractotCurrentWeatherProtocol {
     
     var presenter: InteractorToPresenterCurrentWeatherProtocol? { get set }
-    var currentWeatherPublisher: WeatherEntitiesRepositoryCurrentWeatherPublisher? {get set}
+    func fetchCurrentWeather()
 }
-
 
 // MARK: Interactor Output (Interactor -> Presenter)
 protocol InteractorToPresenterCurrentWeatherProtocol {
-    func updateCurrentWeather(using currentWeather: CurrentWeather)
+    func fetchedCurrentWeather(currentWeather: CurrentWeather)
+    func fetchedCurrentWeatherFailed(message: String)
 }
-
 
 // MARK: Router Input (Presenter -> Router)
 protocol PresenterToRouterCurrentWeatherProtocol {

@@ -25,7 +25,7 @@ class CustomCurrentWeatherView: UIView {
         setupView()
     }
 
-    func update(currentWeather: CurrentWeather){
+    func update(currentWeather: CurrentWeather) {
         temperatureLabel.text = currentWeather.temperature.toCelcius
         dateLabel.text = "\(Date().todaysWeekDay)\r\n\(Date().todayFormated)"
         backgroundWeatherImageView.image = UIImage(named: currentWeather.backgroundName)
@@ -68,7 +68,7 @@ class CustomCurrentWeatherView: UIView {
         self.addSubview(verticalStack)
     }
 
-    private func setupBackgroundImageViewConstraints(){
+    private func setupBackgroundImageViewConstraints() {
         NSLayoutConstraint.activate([
             backgroundImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),

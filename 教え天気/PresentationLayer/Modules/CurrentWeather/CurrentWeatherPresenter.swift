@@ -15,10 +15,18 @@ class CurrentWeatherPresenter: ViewToPresenterCurrentWeatherProtocol {
     var interactor: PresenterToInteractotCurrentWeatherProtocol?
     var router: PresenterToRouterCurrentWeatherProtocol?
 
+    func updateView() {
+        interactor?.fetchCurrentWeather()
+    }
 }
 
 extension CurrentWeatherPresenter: InteractorToPresenterCurrentWeatherProtocol {
-    func updateCurrentWeather(using currentWeather: CurrentWeather) {
-        view?.refresh(data: currentWeather)
+    func fetchedCurrentWeather(currentWeather: CurrentWeather) {
+        view?.showCurrentWeather(withCurrentWeather: currentWeather)
     }
+
+    func fetchedCurrentWeatherFailed(message: String) {
+        
+    }
+
 }

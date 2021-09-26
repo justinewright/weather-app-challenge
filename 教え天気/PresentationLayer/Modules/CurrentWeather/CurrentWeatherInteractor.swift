@@ -13,21 +13,27 @@ class CurrentWeatherInteractor: PresenterToInteractotCurrentWeatherProtocol {
 
     // MARK: Properties
     var presenter: InteractorToPresenterCurrentWeatherProtocol?
-    var currentWeatherPublisher: WeatherEntitiesRepositoryCurrentWeatherPublisher? {
-        didSet(currentPub) {
-            bindCurrentWeatherPublisher()
-        }
-    }
-
+    private var repo: WeatherEntitiesRepositoryCurrentWeatherPublisher
+    private var currentWeather: CurrentWeather
     private var cancellables: Set<AnyCancellable> = []
 
-    init() {}
+    init(weatherEntitiesRepository: WeatherEntitiesRepositoryCurrentWeatherPublisher) {
+        repo = weatherEntitiesRepository
+        currentWeather = CurrentWeather(dailyWeather: defaultDailyData.first!, currentWeather: defaultCurrentData)
+        bindCurrentWeatherPublisher()
+    }
+
+    func fetchCurrentWeather() {
+        presenter?.fetchedCurrentWeather(currentWeather: currentWeather )
+    }
 
     private func bindCurrentWeatherPublisher() {
-        currentWeatherPublisher?.currentWeatherPub()
-            .sink(receiveValue: { currentWeather in
-                self.presenter?.updateCurrentWeather(using: currentWeather)
-            }).store(in: &cancellables)
+        repo.currentWeatherPub()
+                .sink(receiveValue: { currentWeather in
+                    self.currentWeather = currentWeather
+                    self.presenter?.fetchedCurrentWeather(currentWeather:  self.currentWeather)
+                }).store(in: &cancellables)
 
-    }
+        }
+
 }
