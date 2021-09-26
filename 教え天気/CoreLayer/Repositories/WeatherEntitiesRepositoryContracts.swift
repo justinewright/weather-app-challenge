@@ -8,16 +8,20 @@
 import Foundation
 import Combine
 
-protocol WeatherEntitiesRepositoryAddressPublisher {
-    func addressPub()-> AnyPublisher<String, Never>
+protocol WeatherEntitiesRepositoryAddressProtocol {
+    func fetch() -> String
 }
 
 protocol WeatherEntitiesRepositoryCurrentWeatherPublisher {
-    func currentWeatherPub() -> AnyPublisher<CurrentWeather, Never> 
+    func currentWeatherPub() -> AnyPublisher<CurrentWeather, Never>
 }
 
 protocol WeatherEntitiesRepositoryDailyForecastWeatherPublisher {
     func forecastWeatherPub() -> AnyPublisher<[DailyWeather], Never>
+}
+
+protocol WeatherEntitiesRepositoryLoadedPublisher {
+    func loadedPub() -> AnyPublisher<Bool, Never>
 }
 
 protocol WeatherEntitiesRepositoryRefresh {

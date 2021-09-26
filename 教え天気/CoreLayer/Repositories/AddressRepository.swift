@@ -7,55 +7,45 @@
 
 import Foundation
 import CoreLocation
-import Combine
 
 class AddressRepository {
 
-    @Published private (set) var addressStrings: [String] = []
-    private var cancellables: Set<AnyCancellable> = []
-
-    init() {
-        setBindings()
+    var addresses: [String]  {
+        get {
+            return UserDefaults.standard.addresses
+        }
     }
 
-    private func saveAddressesToUserStorage() {
-        UserDefaults.standard.addresses = addressStrings
+    static let shared = AddressRepository()
+    var isDirty = true
+
+    private init() {
     }
 
-    func addNewAddress(name: String) {
-        if addressExists(name: name, cityNames: addressStrings) {
+    func add(newAddress name: String) {
+        if addressExists(name: name, cityNames: addresses) {
             return
         }
-        addressStrings.append(name)
+        UserDefaults.standard.addresses.append(name)
+        isDirty = true
         saveAddressesToUserStorage()
     }
 
-    func addressExists(name: String, cityNames: [String]) -> Bool {
+    func add(currentAddress name: String) {
+        if addressExists(name: name, cityNames: addresses) {
+            UserDefaults.standard.addresses.removeAll { $0 == name }
+        }
+        UserDefaults.standard.addresses.insert(name, at: 0)
+        isDirty = true
+        saveAddressesToUserStorage()
+    }
+
+    private func saveAddressesToUserStorage() {
+        UserDefaults.standard.addresses = addresses
+    }
+
+    private func addressExists(name: String, cityNames: [String]) -> Bool {
         return cityNames.contains(name)
     }
 
-    func loadAddresses() {
-        addressStrings = UserDefaults.standard.addresses
-    }
-    
-    var addresses: [String] {
-        return UserDefaults.standard.addresses
-    }
-
-    func setBindings() {
-        UserDefaults.standard
-            .publisher(for: \.addresses)
-            .handleEvents(receiveOutput: { self.addressStrings = $0 })
-            .sink { _ in}
-            .store(in: &cancellables)
-    }
-
-}
-
-extension AddressRepository: AddressPublisher {
-    func addressPub() -> AnyPublisher<[String], Never> {
-        $addressStrings
-            .debounce(for: 0, scheduler: RunLoop.main)
-            .eraseToAnyPublisher()
-    }
 }
