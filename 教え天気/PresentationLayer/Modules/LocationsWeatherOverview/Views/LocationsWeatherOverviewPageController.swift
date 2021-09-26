@@ -11,7 +11,6 @@ import CoreLocation
 class LocationsWeatherOverviewPageController: UIPageViewController {
     
     private var pages = [UIViewController]()
-    private var currentLocationName: String = ""
 
     lazy var emptyView: UIViewController = {
         let vc = UIViewController()
@@ -20,7 +19,7 @@ class LocationsWeatherOverviewPageController: UIPageViewController {
     }()
 
     private let pageControl = UIPageControl()
-    private let initialPage = 0
+    private let initialPage = UIPageControl.sharedCurrentPage
     
     override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewController.OptionsKey.interPageSpacing: 5])
@@ -38,10 +37,22 @@ class LocationsWeatherOverviewPageController: UIPageViewController {
         setupView()
     }
 
+    func refresh(pages: [UIViewController]) {
+        DispatchQueue.main.async {
+            if pages.isEmpty {
+                return
+            }
+            self.pages = pages
+            self.setViewControllers([self.pages[UIPageControl.sharedCurrentPage]], direction: .forward, animated: true, completion: nil)
+            self.dataSource = nil
+            self.dataSource = self
+            self.pageControl.numberOfPages = self.pages.count
+        }
+    }
 }
 
-extension LocationsWeatherOverviewPageController {
-    func setupView() {
+private extension LocationsWeatherOverviewPageController {
+    private func setupView() {
         dataSource = self
         delegate = self
 
@@ -51,7 +62,7 @@ extension LocationsWeatherOverviewPageController {
         style()
     }
 
-    func style() {
+    private func style() {
         pageControl.clipsToBounds = true
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.currentPageIndicatorTintColor = UIColor(named: "Light Turqoise")
@@ -60,7 +71,7 @@ extension LocationsWeatherOverviewPageController {
         pageControl.currentPage = initialPage
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         view.addSubview(pageControl)
 
         NSLayoutConstraint.activate([
@@ -70,40 +81,9 @@ extension LocationsWeatherOverviewPageController {
         ])
 
         view.bottomAnchor.constraint(equalToSystemSpacingBelow: pageControl.bottomAnchor, multiplier: 2).isActive = true
-
     }
 
-//    func addPage(page: UIViewController) {
-//        DispatchQueue.main.async {
-//            self.pages.append(page)
-//            self.setViewControllers([self.pages[self.initialPage]], direction: .forward, animated: true, completion: nil)
-//            self.dataSource = nil
-//            self.dataSource = self
-//            self.pageControl.numberOfPages = self.pages.count
-//            self.view.isUserInteractionEnabled = self.pages.count > 1
-//        }
-//    }
-
-    func refresh(pages: [UIViewController]) {
-        DispatchQueue.main.async {
-            if pages.isEmpty {
-                return
-            }
-            self.pages = pages
-            self.setViewControllers([self.pages[self.initialPage]], direction: .forward, animated: true, completion: nil)
-            self.dataSource = nil
-            self.dataSource = self
-            self.pageControl.numberOfPages = self.pages.count
-        }
-    }
-
-    func setDataSource(pages: [UIViewController]) {
-        DispatchQueue.main.async {
-            self.pages = pages
-        }
-    }
 }
-
 // MARK: - DataSource
 extension LocationsWeatherOverviewPageController: UIPageViewControllerDataSource {
 

@@ -11,7 +11,7 @@ import CoreLocation
 
 // MARK: View Output (Presenter -> View)
 protocol PresenterToViewLocationsWeatherOverviewProtocol {
-    func refresh(pages: [UIViewController])
+    func showPages(usingWeatherEntitiesRepos repos: [WeatherEntitiesRepository])
 }
 
 // MARK: View Input (View -> Presenter)
@@ -20,22 +20,21 @@ protocol ViewToPresenterLocationsWeatherOverviewProtocol {
     var view: PresenterToViewLocationsWeatherOverviewProtocol? { get set }
     var interactor: PresenterToInteractorLocationsWeatherOverviewProtocol? { get set }
     var router: PresenterToRouterLocationsWeatherOverviewProtocol? { get set }
-    var makeLocationsWeatherOverviewPageViewController: LocationsWeatherOverviewPageController { get }
+
     func fetchPages()
 }
-
 
 // MARK: Interactor Input (Presenter -> Interactor)
 protocol PresenterToInteractorLocationsWeatherOverviewProtocol {
     var presenter: InteractorToPresenterLocationsWeatherOverviewProtocol? { get set }
-    func fetchCoordinates()
-}
 
+    func fetchPages()
+}
 
 // MARK: Interactor Output (Interactor -> Presenter)
 protocol InteractorToPresenterLocationsWeatherOverviewProtocol {
-    func updateWeatherOverviewPages(coordinates: [CLLocationCoordinate2D])
-    func updateWeatherOverviewPage(coordinates: CLLocationCoordinate2D)
+    func fetchedPages(repos: [WeatherEntitiesRepository])
+    func fetchedPagesFailed(message: String)
 }
 
 // MARK: Router Input (Presenter -> Router)

@@ -20,12 +20,16 @@ class LocationsWeatherOverviewViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.presenter?.fetchPages()
-        print("updating view")
+        setupView()
+        presenter?.fetchPages()
+
     }
+    // MARK: - Initialization
 
     init() {
+        locationsWeatherOverviewPageController = LocationsWeatherOverviewPageController()
         super.init(nibName: nil, bundle: nil)
+        presenter?.fetchPages()
     }
 
     required init?(coder: NSCoder) {
@@ -33,30 +37,28 @@ class LocationsWeatherOverviewViewController: UIViewController {
     }
 
     // MARK: - Properties
+    
     var presenter: ViewToPresenterLocationsWeatherOverviewProtocol?
-    var locationsWeatherOverviewPageController: LocationsWeatherOverviewPageController!
-    var isLoading: Bool = false {
-        willSet(value) {
-            if value {
-                self.presenter?.fetchPages()
-            }
-        }
-    }
+    private var locationsWeatherOverviewPageController: LocationsWeatherOverviewPageController!
+    private var onePageViewController: UIViewController!
 
     private func setupView() {
-        self.locationsWeatherOverviewPageController = presenter?.makeLocationsWeatherOverviewPageViewController
+        onePageViewController = UIViewController()
+
+        self.addChild(onePageViewController)
+        view.addSubview(onePageViewController.view)
+        onePageViewController.didMove(toParent: self)
+        onePageViewController.view.isHidden = true
+
+        locationsWeatherOverviewPageController = LocationsWeatherOverviewPageController()
+//        presenter?.fetchPages()
         self.addChild(locationsWeatherOverviewPageController)
         self.view.addSubview(locationsWeatherOverviewPageController.view)
         self.locationsWeatherOverviewPageController.didMove(toParent: self)
-//        DispatchQueue.main.async {
-//            self.presenter?.updatePages()
-//        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            self.isLoading = true
-        }
+        locationsWeatherOverviewPageController.view.isHidden = true
+
         setupConstraints()
     }
-
 
     private func setupConstraints() {
         let locationsWeatherOverviewView = locationsWeatherOverviewPageController.view!
@@ -73,8 +75,30 @@ class LocationsWeatherOverviewViewController: UIViewController {
 }
 
 extension LocationsWeatherOverviewViewController: PresenterToViewLocationsWeatherOverviewProtocol{
-    func refresh(pages: [UIViewController]) {
-        locationsWeatherOverviewPageController.refresh(pages: pages)
+    func showPages(usingWeatherEntitiesRepos repos: [WeatherEntitiesRepository]) {
+        DispatchQueue.main.async { [self] in
+            if repos.isEmpty { return }
+            let pages = repos.map {WeatherOverviewRouter.createModule(repo: $0)}
+            if pages.count == 1 {
+                locationsWeatherOverviewPageController.view.isHidden = true
+                pages.first!.view.frame = CGRect(x: width * 0.1 / 2, y: 0, width: width * 0.9, height: height * 0.8)
+                pages.first!.view.layer.masksToBounds = true
+                pages.first!.view.layer.cornerRadius = 20
+                onePageViewController.addChild(pages.first!)
+                onePageViewController.view.addSubview((pages.first?.view)!)
+                pages.first?.didMove(toParent: onePageViewController)
+
+                onePageViewController.view.isHidden = false
+            } else {
+                onePageViewController.children.forEach { child in
+                    child.removeFromParent()
+                }
+                onePageViewController.view.isHidden = true
+                locationsWeatherOverviewPageController.refresh(pages: pages)
+                locationsWeatherOverviewPageController.view.isHidden = false
+            }
+        }
+
     }
     // TODO: Implement View Output Methods
 }

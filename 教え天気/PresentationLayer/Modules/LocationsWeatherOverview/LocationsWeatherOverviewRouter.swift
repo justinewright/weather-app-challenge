@@ -21,20 +21,7 @@ class LocationsWeatherOverviewRouter: PresenterToRouterLocationsWeatherOverviewP
         viewController.presenter = presenter
         viewController.presenter?.router = LocationsWeatherOverviewRouter()
         viewController.presenter?.view = viewController
-        
-        let interactor = LocationsWeatherOverviewInteractor()
-//        let repo = AddressRepository()
-
-//        DispatchQueue.main.async {
-//            repo.addresses.forEach { address in
-//                address.coordinate{ coordinates, _ in
-//                    if let coordinates = coordinates {
-//                        interactor.addAddress(coordinates: coordinates)
-//                    }
-//                }
-//            }
-//        }
-        viewController.presenter?.interactor = interactor
+        viewController.presenter?.interactor = LocationsWeatherOverviewInteractor()
         viewController.presenter?.interactor?.presenter = presenter
 
         return viewController
