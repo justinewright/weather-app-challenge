@@ -12,10 +12,4 @@ class WeatherOverviewInteractor: PresenterToInteractorWeatherOverviewProtocol {
 
     // MARK: Properties
     var presenter: InteractorToPresenterWeatherOverviewProtocol?
-    var weatherEntityRepository: WeatherEntitiesRepositoryRefresh?
-
-    func fetch() {
-        weatherEntityRepository?.refresh()
-    }
-
 }

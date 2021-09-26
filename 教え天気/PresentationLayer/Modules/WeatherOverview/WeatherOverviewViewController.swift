@@ -8,33 +8,29 @@
 
 import UIKit
 
-class WeatherOverviewViewController: UIViewController {
-    private var primaryViewController = UIViewController()
-    private var locationHeaderViewController: UIViewController!
-    private var currentWeatherViewController: UIViewController!
-    private var fiveDayForecastViewController: UIViewController!
+typealias WeatherOverviewSubmodules = (
+    locationHeader: UIViewController,
+    currentWeather: UIViewController,
+    fiveDayForecast: UIViewController
+)
 
+class WeatherOverviewViewController: UIViewController {
+    private var submodules: WeatherOverviewSubmodules!
     // MARK: - Lifecycle Methods
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupView()
-        presenter?.fetch()
     }
 
-    var emptyView: UIViewController = {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .blue
-        return vc
-    }()
-
-    init() {
+    // MARK: - Initialization
+    init(usingSubmodules weatherOverviewSubmodules: WeatherOverviewSubmodules) {
         super.init(nibName: nil, bundle: nil)
+        submodules = (
+            locationHeader: weatherOverviewSubmodules.locationHeader,
+            currentWeather: weatherOverviewSubmodules.currentWeather,
+            fiveDayForecast: weatherOverviewSubmodules.fiveDayForecast
+        )
         view.backgroundColor = .black
-
-//        locationHeaderViewController = LocationHeaderRouter.createModule()
-//        currentWeatherViewController = CurrentWeatherRouter.createModule()
-//        fiveDayForecastViewController = FiveDayForecastRouter.createModule()
-
     }
 
     required init?(coder: NSCoder) {
@@ -44,32 +40,19 @@ class WeatherOverviewViewController: UIViewController {
     // MARK: - Properties
     var presenter: ViewToPresenterWeatherOverviewProtocol?
 
-    fileprivate func setupLocationHeaderView() {
-        locationHeaderViewController = presenter?.subModules![WeatherOverViewSubModules.locationHeader.rawValue]
-        addChild(locationHeaderViewController)
-        self.view.addSubview(locationHeaderViewController.view)
-        locationHeaderViewController.didMove(toParent: self)
-    }
-
-    fileprivate func setupCurrentWeatherView() {
-        currentWeatherViewController = presenter?.subModules![WeatherOverViewSubModules.currentWeather.rawValue]
-        addChild(currentWeatherViewController)
-        self.view.addSubview(currentWeatherViewController.view)
-        currentWeatherViewController.didMove(toParent: self)
-    }
-
-    fileprivate func setupFiveDayForecastView() {
-        fiveDayForecastViewController = presenter?.subModules![WeatherOverViewSubModules.fiveDayForecast.rawValue]
-        addChild(fiveDayForecastViewController)
-        self.view.addSubview(fiveDayForecastViewController.view)
-        fiveDayForecastViewController.didMove(toParent: self)
+    private func addSubmodule(_ submodule: UIViewController) {
+        addChild(submodule)
+        self.view.addSubview(submodule.view)
+        submodule.didMove(toParent: self)
     }
 
     private func setupView() {
-        setupLocationHeaderView()
-        setupCurrentWeatherView()
-        setupFiveDayForecastView()
+        addSubmodule(submodules.locationHeader)
+        addSubmodule(submodules.currentWeather)
+        addSubmodule(submodules.fiveDayForecast)
+
         setupConstraints()
+        applyStyle()
     }
 
     private func setupConstraints() {
@@ -79,7 +62,7 @@ class WeatherOverviewViewController: UIViewController {
     }
 
     private func setupLocationHeaderViewConstraints() {
-        let locationHeaderView = locationHeaderViewController.view!
+        let locationHeaderView = submodules.locationHeader.view!
         locationHeaderView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
@@ -91,18 +74,18 @@ class WeatherOverviewViewController: UIViewController {
     }
 
     private func setupCurrentWeatherViewConstraints() {
-        let currentWeatherView = currentWeatherViewController.view!
+        let currentWeatherView = submodules.currentWeather.view!
         currentWeatherView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             currentWeatherView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-            currentWeatherView.topAnchor.constraint(equalTo: self.locationHeaderViewController.view.bottomAnchor, constant: 0),
+            currentWeatherView.topAnchor.constraint(equalTo: self.submodules.locationHeader.view.bottomAnchor, constant: 0),
             currentWeatherView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
             currentWeatherView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height )
         ])
     }
 
     private func setupForecastViewConstraints() {
-        let forecastView = fiveDayForecastViewController.view!
+        let forecastView = submodules.fiveDayForecast.view!
         forecastView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             forecastView.heightAnchor.constraint(greaterThanOrEqualToConstant: 226),
@@ -111,13 +94,14 @@ class WeatherOverviewViewController: UIViewController {
             forecastView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0)
         ])
     }
+
+    private func applyStyle() {
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 20
+    }
     
 }
 
 extension WeatherOverviewViewController: PresenterToViewWeatherOverviewProtocol{
-    func refresh(data location: String) {
-        
-    }
-
     // TODO: Implement View Output Methods
 }
