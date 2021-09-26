@@ -81,7 +81,6 @@
 		2186DE5F26F49E54000F920D /* CurrentWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186DE1626F49E54000F920D /* CurrentWeather.swift */; };
 		2186DE6026F49E54000F920D /* DailyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186DE1726F49E54000F920D /* DailyWeather.swift */; };
 		2186DE6126F49E54000F920D /* WeatherEntitiesRepositoryContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186DE1A26F49E54000F920D /* WeatherEntitiesRepositoryContracts.swift */; };
-		2186DE6226F49E54000F920D /* AddressRepositoryContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186DE1B26F49E54000F920D /* AddressRepositoryContracts.swift */; };
 		2186DE6326F49E54000F920D /* AddressRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186DE1C26F49E54000F920D /* AddressRepository.swift */; };
 		2186DE6426F49E54000F920D /* WeatherEntitiesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186DE1D26F49E54000F920D /* WeatherEntitiesRepository.swift */; };
 		2186DE6526F49E54000F920D /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186DE1F26F49E54000F920D /* WeatherData.swift */; };
@@ -168,7 +167,6 @@
 		2186DE1626F49E54000F920D /* CurrentWeather.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentWeather.swift; sourceTree = "<group>"; };
 		2186DE1726F49E54000F920D /* DailyWeather.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyWeather.swift; sourceTree = "<group>"; };
 		2186DE1A26F49E54000F920D /* WeatherEntitiesRepositoryContracts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherEntitiesRepositoryContracts.swift; sourceTree = "<group>"; };
-		2186DE1B26F49E54000F920D /* AddressRepositoryContracts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressRepositoryContracts.swift; sourceTree = "<group>"; };
 		2186DE1C26F49E54000F920D /* AddressRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressRepository.swift; sourceTree = "<group>"; };
 		2186DE1D26F49E54000F920D /* WeatherEntitiesRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherEntitiesRepository.swift; sourceTree = "<group>"; };
 		2186DE1F26F49E54000F920D /* WeatherData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
@@ -472,7 +470,6 @@
 			children = (
 				2186DE1A26F49E54000F920D /* WeatherEntitiesRepositoryContracts.swift */,
 				2186DE1D26F49E54000F920D /* WeatherEntitiesRepository.swift */,
-				2186DE1B26F49E54000F920D /* AddressRepositoryContracts.swift */,
 				2186DE1C26F49E54000F920D /* AddressRepository.swift */,
 			);
 			path = Repositories;
@@ -662,7 +659,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2173364226FB826B0082A412 /* Database.swift in Sources */,
-				2186DE6226F49E54000F920D /* AddressRepositoryContracts.swift in Sources */,
 				2186DE4F26F49E54000F920D /* MainContract.swift in Sources */,
 				2186DE6326F49E54000F920D /* AddressRepository.swift in Sources */,
 				2186DE3326F49E54000F920D /* FiveDayForecastViewController.swift in Sources */,
