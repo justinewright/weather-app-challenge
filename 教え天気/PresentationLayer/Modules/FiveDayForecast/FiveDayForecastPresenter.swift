@@ -14,15 +14,18 @@ class FiveDayForecastPresenter: ViewToPresenterFiveDayForecastProtocol {
     var view: PresenterToViewFiveDayForecastProtocol?
     var interactor: PresenterToInteractorFiveDayForecastProtocol?
     var router: PresenterToRouterFiveDayForecastProtocol?
-    
+
+    func updateView() {
+        interactor?.fetchForecast()
+    }
 }
 
 extension FiveDayForecastPresenter: InteractorToPresenterFiveDayForecastProtocol {
-    func updateFiveDayForecast(using dailyForecast: [DailyWeather]) {
-        view?.refresh(data: dailyForecast)
+    func fetchedForecast(dailyForecast: [DailyWeather]) {
+        view?.showForecast(usingDailyForecast: dailyForecast)
     }
-    
-    var createCustomForecastCollectionView: ForecastCollectionView {
-        ForecastCollectionView()
+
+    func fetchedForecastFailed(message: String) {
+        // something
     }
 }

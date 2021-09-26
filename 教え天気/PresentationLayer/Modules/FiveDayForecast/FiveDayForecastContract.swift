@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: View Output (Presenter -> View)
 protocol PresenterToViewFiveDayForecastProtocol {
-    func refresh(data dailyForecast: [DailyWeather])
+    func showForecast(usingDailyForecast dailyForecast: [DailyWeather])
 }
 
 // MARK: View Input (View -> Presenter)
@@ -20,20 +20,21 @@ protocol ViewToPresenterFiveDayForecastProtocol {
     var interactor: PresenterToInteractorFiveDayForecastProtocol? { get set }
     var router: PresenterToRouterFiveDayForecastProtocol? { get set }
 
-    var createCustomForecastCollectionView: ForecastCollectionView { get }
+    func updateView()
 }
-
 
 // MARK: Interactor Input (Presenter -> Interactor)
 protocol PresenterToInteractorFiveDayForecastProtocol {
     
     var presenter: InteractorToPresenterFiveDayForecastProtocol? { get set }
-    var forecastWeatherPublisher: WeatherEntitiesRepositoryDailyForecastWeatherPublisher? {get set}
+
+    func fetchForecast()
 }
 
 // MARK: Interactor Output (Interactor -> Presenter)
 protocol InteractorToPresenterFiveDayForecastProtocol {
-    func updateFiveDayForecast(using dailyForecast: [DailyWeather])
+    func fetchedForecast(dailyForecast: [DailyWeather])
+    func fetchedForecastFailed(message: String)
 }
 
 // MARK: Router Input (Presenter -> Router)

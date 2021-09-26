@@ -55,16 +55,6 @@ class ForecastCollectionView: UIView {
         }
     }
 
-//    private func setupBindings() {
-//        viewModel.$weatherForecast
-//            .receive(on: DispatchQueue.main)
-//            .sink { _ in
-//
-//            } receiveValue: { _ in
-//                self.collectionView.reloadData()
-//            }.store(in: &cancellables)
-//    }
-
 }
 
 extension ForecastCollectionView: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -73,7 +63,8 @@ extension ForecastCollectionView: UICollectionViewDataSource, UICollectionViewDe
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dailyForecast.isEmpty ? 0 : 5
+
+        return dailyForecast.isEmpty ? 0 : dailyForecast.first?.icon == "-1" ? 0 : 5
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -97,4 +88,3 @@ extension ForecastCollectionView: UICollectionViewDelegateFlowLayout {
         return 10
     }
 }
-

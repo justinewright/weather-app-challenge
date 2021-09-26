@@ -13,21 +13,25 @@ class FiveDayForecastInteractor: PresenterToInteractorFiveDayForecastProtocol {
 
     // MARK: Properties
     var presenter: InteractorToPresenterFiveDayForecastProtocol?
-    var forecastWeatherPublisher: WeatherEntitiesRepositoryDailyForecastWeatherPublisher? {
-        didSet(forecastPub) {
-            bindForecastWeatherPublisher()
-        }
-    }
-
+    private var repo: WeatherEntitiesRepositoryDailyForecastWeatherPublisher
     private var cancellables: Set<AnyCancellable> = []
+    private var fiveDayForecast: [DailyWeather] = []
 
-    init() {}
-
+    init(repo: WeatherEntitiesRepositoryDailyForecastWeatherPublisher) {
+        self.repo = repo
+        bindForecastWeatherPublisher()
+    }
+    
     private func bindForecastWeatherPublisher() {
-        forecastWeatherPublisher?.forecastWeatherPub()
+        repo.forecastWeatherPub()
             .sink(receiveValue: { forecast in
-                self.presenter?.updateFiveDayForecast(using: forecast)
+                self.fiveDayForecast = forecast
+                self.presenter?.fetchedForecast(dailyForecast: self.fiveDayForecast)
             }).store(in: &cancellables)
 
+    }
+
+    func fetchForecast() {
+        presenter?.fetchedForecast(dailyForecast: fiveDayForecast)
     }
 }

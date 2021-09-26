@@ -16,6 +16,12 @@ class FiveDayForecastViewController: UIViewController {
         setupView()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+        setupView()
+    }
+
+    // MARK: - Initialization
     init() {
         super.init(nibName: nil, bundle: nil)
         forecastCollectionView = ForecastCollectionView()
@@ -24,13 +30,14 @@ class FiveDayForecastViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
     // MARK: - Properties
     var presenter: ViewToPresenterFiveDayForecastProtocol?
     private var forecastCollectionView: ForecastCollectionView!
+    private var fiveDayDailyforecast: [DailyWeather]!
 
     private func setupView() {
         self.view.addSubview(forecastCollectionView)
-
         setupConstraints()
     }
 
@@ -46,13 +53,12 @@ class FiveDayForecastViewController: UIViewController {
     
 }
 
-extension FiveDayForecastViewController: PresenterToViewFiveDayForecastProtocol{
-    func refresh(data dailyForecast: [DailyWeather]) {
+extension FiveDayForecastViewController: PresenterToViewFiveDayForecastProtocol {
+    func showForecast(usingDailyForecast dailyForecast: [DailyWeather]) {
         DispatchQueue.main.async {
-            self.setupView()
-            self.forecastCollectionView.refresh(data: dailyForecast)
+            self.fiveDayDailyforecast = dailyForecast
+            self.forecastCollectionView.refresh(data:   self.fiveDayDailyforecast)
         }
     }
-
     // TODO: Implement View Output Methods
 }

@@ -12,23 +12,8 @@ import UIKit
 class FiveDayForecastRouter: PresenterToRouterFiveDayForecastProtocol {
     
     // MARK: Static methods
-    static func createModule() -> UIViewController {
-        
-        let viewController = FiveDayForecastViewController()
-        
-        let presenter: ViewToPresenterFiveDayForecastProtocol & InteractorToPresenterFiveDayForecastProtocol = FiveDayForecastPresenter()
-        
-        viewController.presenter = presenter
-        viewController.presenter?.router = FiveDayForecastRouter()
-        viewController.presenter?.view = viewController
-        viewController.presenter?.interactor = FiveDayForecastInteractor()
-        viewController.presenter?.interactor?.presenter = presenter
-        viewController.presenter?.interactor?.forecastWeatherPublisher = WeatherEntitiesRepository(lat: locationCoordinates[0].latitude, lon: locationCoordinates[0].longitude)
 
-        return viewController
-    }
-
-    static func createModule(weatherEntitiesRepository: WeatherEntitiesRepository) -> UIViewController {
+    static func createModule(repo: WeatherEntitiesRepositoryDailyForecastWeatherPublisher) -> UIViewController {
 
         let viewController = FiveDayForecastViewController()
 
@@ -37,9 +22,8 @@ class FiveDayForecastRouter: PresenterToRouterFiveDayForecastProtocol {
         viewController.presenter = presenter
         viewController.presenter?.router = FiveDayForecastRouter()
         viewController.presenter?.view = viewController
-        viewController.presenter?.interactor = FiveDayForecastInteractor()
+        viewController.presenter?.interactor = FiveDayForecastInteractor(repo: repo)
         viewController.presenter?.interactor?.presenter = presenter
-        viewController.presenter?.interactor?.forecastWeatherPublisher = weatherEntitiesRepository
 
         return viewController
     }
