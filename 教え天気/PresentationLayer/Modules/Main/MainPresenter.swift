@@ -17,5 +17,4 @@ class MainPresenter: ViewToPresenterMainProtocol {
 }
 
 extension MainPresenter: InteractorToPresenterMainProtocol {
-    
 }

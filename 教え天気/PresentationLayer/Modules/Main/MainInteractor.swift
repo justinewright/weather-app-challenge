@@ -9,7 +9,6 @@
 import Foundation
 
 class MainInteractor: PresenterToInteractorMainProtocol {
-
     // MARK: Properties
     var presenter: InteractorToPresenterMainProtocol?
 }
