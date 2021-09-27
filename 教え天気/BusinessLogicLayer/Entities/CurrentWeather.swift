@@ -12,8 +12,7 @@ struct CurrentWeather {
     let minTemperature: Double
     let maxTemperature: Double
     let icon: String
-    var dayOfWeekEnglish: String = ""
-    var dayOfWeekJapanese: String = ""
+    let currentWeatherString: String = "現\r\n在"
 
     var conditionName: String {
         iconList[icon] ?? "wifi.slash"
@@ -22,16 +21,6 @@ struct CurrentWeather {
     var backgroundName: String {
         backgroundList[icon] ?? "empty"
     }
-
-    let weekdaysJapanese: [String: String] = [
-        "Mon":"月\r\n曜\r\n日",
-        "Tue":"火\r\n曜\r\n日",
-        "Wed":"水\r\n曜\r\n日",
-        "Thu":"木\r\n曜\r\n日",
-        "Fri":"金\r\n曜\r\n日",
-        "Sat":"土\r\n曜\r\n日",
-        "Sun":"日\r\n曜\r\n日"
-    ]
 
     let iconList: [String: String] =
         ["01d": "sun.max", "01n": "moon.stars",
@@ -64,7 +53,5 @@ struct CurrentWeather {
         minTemperature = dailyWeather.temp.min
         maxTemperature = dailyWeather.temp.max
         icon = currentWeather.weather[0].icon
-        dayOfWeekEnglish = Date().weekDay(unixTime: dailyWeather.dt)
-        dayOfWeekJapanese = weekdaysJapanese[dayOfWeekEnglish] ?? ""
     }
 }
