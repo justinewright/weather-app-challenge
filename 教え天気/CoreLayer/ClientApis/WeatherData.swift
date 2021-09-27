@@ -12,9 +12,16 @@ struct WeatherData: Codable {
     let lon: Double
     let daily: [Daily]
     let current: Current
+    let hourly: [Hourly]
 }
 
 struct Current: Codable {
+    let dt: Double
+    let temp: Double
+    let weather: [Weather]
+}
+
+struct Hourly: Codable {
     let dt: Double
     let temp: Double
     let weather: [Weather]
@@ -26,6 +33,11 @@ struct Daily: Codable {
     let sunset: Double
     let temp: Temperature
     let weather: [Weather]
+    let pressure: Double
+    let humidty: Double
+    let wind_speed: Double
+    let wind_deg: Double
+    let rain: Double
 }
 
 struct Weather: Codable {
@@ -36,6 +48,4 @@ struct Temperature: Codable {
     let day: Double
     let min: Double
     let max: Double
-    let morn: Double
-    let eve: Double
 }
