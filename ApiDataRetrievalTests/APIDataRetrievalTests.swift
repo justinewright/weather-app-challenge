@@ -85,54 +85,54 @@ enum WeatherError: Error {
 
 class APIDataRetrievalTests: XCTestCase {
 
-    var repo: Repository!
-    var mockWeatherClientApi: MockWeatherApiClient!
-
-    override func setUp() {
-        mockWeatherClientApi = MockWeatherApiClient()
-        repo = Repository(weatherApiClient: mockWeatherClientApi)
-    }
-
-    func testSuccessfulApiCallReturnUpdatesRepositoryWeatherForecastWithMockedWeatherData() throws {
-        let weatherData: WeatherData = load("mockData.json")
-
-        let observer = repo.$weatherForecast
-            .collect(1)
-            .first()
-
-        mockWeatherClientApi.fetch(long: 0, lat: 0)
-        mockWeatherClientApi.mockServer.send(weatherData)
-
-        let updatedWeather = try `await`(observer)
-
-        XCTAssertEqual(updatedWeather.count, 1)
-        let model = updatedWeather.last?.first
-
-        XCTAssertEqual(model?.temperature, 20.31)
-        XCTAssertEqual(model?.minTemperature, 19.57)
-        XCTAssertEqual(model?.maxTemperature, 21.11)
-        XCTAssertEqual(model?.conditionName, "cloud.sun.rain")
-        XCTAssertEqual(model?.icon, "10d")
-        XCTAssertEqual(model?.dayOfWeekEnglish, "Thu")
-    }
-
-    func testFailureApiCallReturnUpdatesRepositoryWeatherForecastWithDefault() throws {
-
-        let observer = repo.$weatherForecast
-            .collect(1)
-            .first()
-
-        mockWeatherClientApi.fetch(long: 0, lat: 0)
-        mockWeatherClientApi.mockServer.send(completion: .failure(WeatherError.thingsJustHappen))
-
-        let updatedWeather = try `await`(observer)
-
-        XCTAssertEqual(updatedWeather.count, 1)
-        let model = updatedWeather.last?.first
-
-        XCTAssertEqual(model?.temperature, 0)
-        XCTAssertEqual(model?.minTemperature, 0)
-        XCTAssertEqual(model?.maxTemperature, 0)
-        XCTAssertEqual(model?.conditionName, "wifi.slash")
-    }
+//    var repo: Repository!
+//    var mockWeatherClientApi: MockWeatherApiClient!
+//
+//    override func setUp() {
+//        mockWeatherClientApi = MockWeatherApiClient()
+//        repo = Repository(weatherApiClient: mockWeatherClientApi)
+//    }
+//
+//    func testSuccessfulApiCallReturnUpdatesRepositoryWeatherForecastWithMockedWeatherData() throws {
+//        let weatherData: WeatherData = load("mockData.json")
+//
+//        let observer = repo.$weatherForecast
+//            .collect(1)
+//            .first()
+//
+//        mockWeatherClientApi.fetch(long: 0, lat: 0)
+//        mockWeatherClientApi.mockServer.send(weatherData)
+//
+//        let updatedWeather = try `await`(observer)
+//
+//        XCTAssertEqual(updatedWeather.count, 1)
+//        let model = updatedWeather.last?.first
+//
+//        XCTAssertEqual(model?.temperature, 20.31)
+//        XCTAssertEqual(model?.minTemperature, 19.57)
+//        XCTAssertEqual(model?.maxTemperature, 21.11)
+//        XCTAssertEqual(model?.conditionName, "cloud.sun.rain")
+//        XCTAssertEqual(model?.icon, "10d")
+//        XCTAssertEqual(model?.dayOfWeekEnglish, "Thu")
+//    }
+//
+//    func testFailureApiCallReturnUpdatesRepositoryWeatherForecastWithDefault() throws {
+//
+//        let observer = repo.$weatherForecast
+//            .collect(1)
+//            .first()
+//
+//        mockWeatherClientApi.fetch(long: 0, lat: 0)
+//        mockWeatherClientApi.mockServer.send(completion: .failure(WeatherError.thingsJustHappen))
+//
+//        let updatedWeather = try `await`(observer)
+//
+//        XCTAssertEqual(updatedWeather.count, 1)
+//        let model = updatedWeather.last?.first
+//
+//        XCTAssertEqual(model?.temperature, 0)
+//        XCTAssertEqual(model?.minTemperature, 0)
+//        XCTAssertEqual(model?.maxTemperature, 0)
+//        XCTAssertEqual(model?.conditionName, "wifi.slash")
+//    }
 }
