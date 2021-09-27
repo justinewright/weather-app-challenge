@@ -17,7 +17,7 @@ class OpenWeatherMapsOneCallApiClient: WeatherApiClientProtocol {
     private let excludeParams = "exclude=hourly,minutely,alerts"
 
     init() {
-        weatherData = WeatherData(lat: 0, lon: 0, daily: defaultDailyData, current: defaultCurrentData)
+        weatherData = WeatherData(lat: 0, lon: 0, daily: defaultDailyData, current: defaultCurrentData, hourly: defaultHourlyData)
     }
 
     func fetch(long: Double, lat: Double) {
@@ -59,20 +59,31 @@ class OpenWeatherMapsOneCallApiClient: WeatherApiClientProtocol {
 var defaultWeatherData: WeatherData {
     let daily = defaultDailyData
     let current = defaultCurrentData
+    let hourly = defaultHourlyData
 
-    return WeatherData(lat: 0, lon: 0, daily: daily, current: current)
+    return WeatherData(lat: 0, lon: 0, daily: daily, current: current, hourly: hourly)
 }
 
 var defaultDailyData: [Daily] {
     var daily: [Daily] = []
     for _ in 0..<5 {
-        daily.append(Daily(dt: 0, sunrise: 0, sunset: 0,
-                           temp: Temperature(day: 0, min: 0, max: 0, morn: 0, eve: 0),
-                           weather: [Weather(icon: "-1")]))
+        let temperature = Temperature(day: 0, min: 0, max: 0)
+        let weather = [Weather(icon: "-1")]
+        let newDailyElement = (Daily(dt: 0, sunrise: 0, sunset: 0, temp: temperature, weather: weather, pressure: 0, humidty: 0, wind_speed: 0, wind_deg: 0, rain: 0 ))
+        daily.append(newDailyElement)
     }
     return daily
 }
 
 var defaultCurrentData: Current {
     return Current(dt: 0, temp: 0, weather: [Weather(icon: "-1")])
+}
+
+var defaultHourlyData: [Hourly] {
+    var hourly: [Hourly] = []
+    for _ in 0..<24 {
+        let newElement = Hourly(dt: 0, temp: 0, weather: [Weather(icon: "-1")])
+        hourly.append(newElement)
+    }
+    return hourly
 }
