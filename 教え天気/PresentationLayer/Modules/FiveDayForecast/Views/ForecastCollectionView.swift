@@ -11,6 +11,7 @@ class ForecastCollectionView: UIView {
     private let forecastCellReuseIdentifier = "forecast-cell-reuse-identifier"
     private lazy var collectionView: UICollectionView! = nil
     private var dailyForecast: [DailyWeather] = []
+    private var selectedCell: Int = 0
 
     required init() {
         super.init(frame: .zero)
@@ -26,7 +27,6 @@ class ForecastCollectionView: UIView {
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(collectionView)
 
         self.collectionView = collectionView
@@ -39,13 +39,14 @@ class ForecastCollectionView: UIView {
     }
 
     private func setupConstraints() {
+
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: self.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
-        self.translatesAutoresizingMaskIntoConstraints = false
     }
 
     public func refresh(data: [DailyWeather]) {
@@ -63,8 +64,8 @@ extension ForecastCollectionView: UICollectionViewDataSource, UICollectionViewDe
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-
-        return dailyForecast.isEmpty ? 0 : dailyForecast.first?.icon == "-1" ? 0 : 5
+//        return dailyForecast.isEmpty ? 0 : dailyForecast.first?.icon == "-1" ? 0 : 5
+        return dailyForecast.isEmpty ? 0 : 5
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -75,12 +76,15 @@ extension ForecastCollectionView: UICollectionViewDataSource, UICollectionViewDe
         cell.update(dailyWeather: dailyForecast[indexPath.row])
         return cell
     }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectedCell = indexPath.row
+    }
 }
 
 extension ForecastCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        let size = CGSize(width: ForecastCell.width, height: ForecastCell.width)
+        let size = CGSize(width: ForecastCell.flexibleWidth, height: ForecastCell.flexibleWidth)
         return size
     }
 

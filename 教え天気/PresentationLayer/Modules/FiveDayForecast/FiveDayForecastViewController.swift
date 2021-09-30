@@ -57,8 +57,9 @@ extension FiveDayForecastViewController: PresenterToViewFiveDayForecastProtocol 
     func showForecast(usingDailyForecast dailyForecast: [DailyWeather]) {
         DispatchQueue.main.async {
             self.fiveDayDailyforecast = dailyForecast
-            self.forecastCollectionView.refresh(data:   self.fiveDayDailyforecast)
+            self.forecastCollectionView.refresh(data: self.fiveDayDailyforecast)
         }
     }
+
     // TODO: Implement View Output Methods
 }

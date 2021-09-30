@@ -55,7 +55,7 @@ class OpenWeatherMapsOneCallApiClient: WeatherApiClientProtocol {
     }
 
 }
-
+// TODO: - move to a struct for dummy data
 var defaultWeatherData: WeatherData {
     let daily = defaultDailyData
     let current = defaultCurrentData
@@ -87,3 +87,5 @@ var defaultHourlyData: [Hourly] {
     }
     return hourly
 }
+
+var defaultTimeZone = "UTC"

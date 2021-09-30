@@ -25,8 +25,8 @@ class Database {
 
     // MARK: - Initialization
     private init() {
-        bindUpdate()
-        updateData()
+//        bindUpdate()
+//        updateData()
     }
 
     private func bindUpdate() {

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Combine
 
 class CustomCurrentWeatherView: UIView {
 
@@ -17,11 +16,8 @@ class CustomCurrentWeatherView: UIView {
     private var backgroundWeatherImageView: UIImageView!
     private var characterImageView: UIImageView!
 
-    private var cancellables: Set<AnyCancellable> = []
-
     required init() {
         super.init(frame: .zero)
-
         setupView()
     }
 
