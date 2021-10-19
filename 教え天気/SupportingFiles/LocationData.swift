@@ -19,3 +19,4 @@ let locationCoordinates: [CLLocationCoordinate2D] = [
     CLLocationCoordinate2D(latitude: -26.2041, longitude: 28.0473),
     CLLocationCoordinate2D(latitude: 51.5074, longitude: 0.1278)
 ]
+//range -70: 70

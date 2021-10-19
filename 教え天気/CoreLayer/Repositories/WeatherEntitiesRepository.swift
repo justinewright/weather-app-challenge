@@ -12,6 +12,7 @@ import Combine
 class WeatherEntitiesRepository {
 
     @Published private(set) var loadedPublisher: Bool = false
+    @Published private var hourlyWeatherPublisher: [HourlyWeather] = []
     @Published private var currentWeatherPublisher: CurrentWeather
     @Published private var dailyWeatherForecastPublisher: [DailyWeather] = []
     private let loaded = PassthroughSubject<Bool, Never>()
@@ -27,6 +28,8 @@ class WeatherEntitiesRepository {
     init(weatherApiClient: WeatherApiClientProtocol = OpenWeatherMapsOneCallApiClient(), address: String, lat: Double, lon: Double) {
         self.weatherApiClient = weatherApiClient
         currentWeatherPublisher = CurrentWeather(dailyWeather: defaultDailyData.first!, currentWeather: defaultCurrentData)
+
+
         setupBindings()
         weatherApiClient.fetch(long: lon, lat: lat)
         self.address = address
@@ -92,5 +95,12 @@ extension WeatherEntitiesRepository: WeatherEntitiesRepositoryDailyForecastWeath
 extension WeatherEntitiesRepository: WeatherEntitiesRepositoryAddressProtocol {
     func fetch() -> String {
         return address
+    }
+}
+
+extension WeatherEntitiesRepository: WeatherEntitiesRepositoryHourlyWeatherPublisher {
+    func hourlyWeatherPub() -> AnyPublisher<[HourlyWeather], Never> {
+        $hourlyWeatherPublisher
+            .eraseToAnyPublisher()
     }
 }

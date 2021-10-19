@@ -26,5 +26,19 @@ class HourlyForecastRouter: PresenterToRouterHourlyForecastProtocol {
         
         return viewController
     }
+
+    static func createModule(repo: WeatherEntitiesRepository) -> UIViewController {
+
+        let presenter: ViewToPresenterHourlyForecastProtocol & InteractorToPresenterHourlyForecastProtocol = HourlyForecastPresenter()
+        let viewController = HourlyForecastViewController()
+
+        viewController.presenter = presenter
+        viewController.presenter?.router = HourlyForecastRouter()
+        viewController.presenter?.view = viewController
+        viewController.presenter?.interactor = HourlyForecastInteractor()
+        viewController.presenter?.interactor?.presenter = presenter
+
+        return viewController
+    }
     
 }

@@ -11,7 +11,9 @@ import UIKit
 typealias WeatherOverviewSubmodules = (
     locationHeader: UIViewController,
     currentWeather: UIViewController,
-    fiveDayForecast: UIViewController
+    hourlyWeather: UIViewController,
+    fiveDayForecast: UIViewController,
+    detailsView: UIViewController
 )
 
 class WeatherOverviewViewController: UIViewController {
@@ -28,7 +30,9 @@ class WeatherOverviewViewController: UIViewController {
         submodules = (
             locationHeader: weatherOverviewSubmodules.locationHeader,
             currentWeather: weatherOverviewSubmodules.currentWeather,
-            fiveDayForecast: weatherOverviewSubmodules.fiveDayForecast
+            hourlyWeather: weatherOverviewSubmodules.hourlyWeather,
+            fiveDayForecast: weatherOverviewSubmodules.fiveDayForecast,
+            detailsView: weatherOverviewSubmodules.detailsView
         )
         view.backgroundColor = .black
     }

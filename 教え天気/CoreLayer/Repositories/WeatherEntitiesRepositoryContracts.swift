@@ -16,6 +16,10 @@ protocol WeatherEntitiesRepositoryCurrentWeatherPublisher {
     func currentWeatherPub() -> AnyPublisher<CurrentWeather, Never>
 }
 
+protocol WeatherEntitiesRepositoryHourlyWeatherPublisher {
+    func hourlyWeatherPub() -> AnyPublisher<[HourlyWeather], Never>
+}
+
 protocol WeatherEntitiesRepositoryDailyForecastWeatherPublisher {
     func forecastWeatherPub() -> AnyPublisher<[DailyWeather], Never>
 }
