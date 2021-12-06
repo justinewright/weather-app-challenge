@@ -11,7 +11,7 @@ import Foundation
 
 // MARK: View Output (Presenter -> View)
 protocol PresenterToViewHourlyForecastProtocol {
-   
+    func show(theHourlyWeather hourlyWeather: [HourlyWeather])
 }
 
 
@@ -21,6 +21,8 @@ protocol ViewToPresenterHourlyForecastProtocol {
     var view: PresenterToViewHourlyForecastProtocol? { get set }
     var interactor: PresenterToInteractorHourlyForecastProtocol? { get set }
     var router: PresenterToRouterHourlyForecastProtocol? { get set }
+
+    func updateView()
 }
 
 
@@ -28,12 +30,15 @@ protocol ViewToPresenterHourlyForecastProtocol {
 protocol PresenterToInteractorHourlyForecastProtocol {
     
     var presenter: InteractorToPresenterHourlyForecastProtocol? { get set }
+
+    func fetchCurrentWeather()
 }
 
 
 // MARK: Interactor Output (Interactor -> Presenter)
 protocol InteractorToPresenterHourlyForecastProtocol {
-    
+    func fetchedHourlyWeather(hourlyWeather: [HourlyWeather])
+    func fetchedHourlyWeatherFailed(message: String)
 }
 
 

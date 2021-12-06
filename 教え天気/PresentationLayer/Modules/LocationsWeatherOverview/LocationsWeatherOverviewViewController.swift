@@ -27,7 +27,6 @@ class LocationsWeatherOverviewViewController: UIViewController {
     // MARK: - Initialization
 
     init() {
-        locationsWeatherOverviewPageController = LocationsWeatherOverviewPageController()
         super.init(nibName: nil, bundle: nil)
         presenter?.fetchPages()
     }
@@ -39,24 +38,12 @@ class LocationsWeatherOverviewViewController: UIViewController {
     // MARK: - Properties
     
     var presenter: ViewToPresenterLocationsWeatherOverviewProtocol?
-    private var locationsWeatherOverviewPageController: LocationsWeatherOverviewPageController!
-    private var onePageViewController: UIViewController!
+    private lazy var locationsWeatherOverviewPageController = LocationsWeatherOverviewPageController()
 
     private func setupView() {
-        onePageViewController = UIViewController()
-
-        self.addChild(onePageViewController)
-        view.addSubview(onePageViewController.view)
-        onePageViewController.didMove(toParent: self)
-        onePageViewController.view.isHidden = true
-
-        locationsWeatherOverviewPageController = LocationsWeatherOverviewPageController()
-//        presenter?.fetchPages()
         self.addChild(locationsWeatherOverviewPageController)
-        self.view.addSubview(locationsWeatherOverviewPageController.view)
         self.locationsWeatherOverviewPageController.didMove(toParent: self)
-        locationsWeatherOverviewPageController.view.isHidden = true
-
+        self.view.addSubview(locationsWeatherOverviewPageController.view)
         setupConstraints()
     }
 
@@ -76,29 +63,9 @@ class LocationsWeatherOverviewViewController: UIViewController {
 
 extension LocationsWeatherOverviewViewController: PresenterToViewLocationsWeatherOverviewProtocol{
     func showPages(usingWeatherEntitiesRepos repos: [WeatherEntitiesRepository]) {
-        DispatchQueue.main.async { [self] in
-            if repos.isEmpty { return }
-            let pages = repos.map {WeatherOverviewRouter.createModule(repo: $0)}
-            if pages.count == 1 {
-                locationsWeatherOverviewPageController.view.isHidden = true
-                pages.first!.view.frame = CGRect(x: width * 0.1 / 2, y: 0, width: width * 0.9, height: height * 0.8)
-                pages.first!.view.layer.masksToBounds = true
-                pages.first!.view.layer.cornerRadius = 20
-                onePageViewController.addChild(pages.first!)
-                onePageViewController.view.addSubview((pages.first?.view)!)
-                pages.first?.didMove(toParent: onePageViewController)
-
-                onePageViewController.view.isHidden = false
-            } else {
-                onePageViewController.children.forEach { child in
-                    child.removeFromParent()
-                }
-                onePageViewController.view.isHidden = true
-                locationsWeatherOverviewPageController.refresh(pages: pages)
-                locationsWeatherOverviewPageController.view.isHidden = false
-            }
-        }
-
+        if repos.isEmpty { return }
+        let pages = repos.map {WeatherOverviewRouter.createModule(repo: $0)}
+        locationsWeatherOverviewPageController.refresh(pages: pages)
     }
     // TODO: Implement View Output Methods
 }

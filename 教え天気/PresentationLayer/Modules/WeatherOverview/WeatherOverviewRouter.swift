@@ -34,7 +34,9 @@ private extension WeatherOverviewRouter {
         return (
             locationHeader: LocationHeaderRouter.createModule(repo: repo),
             currentWeather: CurrentWeatherRouter.createModule(repo: repo),
-            fiveDayForecast: FiveDayForecastRouter.createModule(repo: repo)
+            hourlyWeather: HourlyForecastRouter.createModule(repo: repo),
+            fiveDayForecast: FiveDayForecastRouter.createModule(repo: repo),
+            detailsView: WeatherDetailsRouter.createModule()
         )
     }
 }

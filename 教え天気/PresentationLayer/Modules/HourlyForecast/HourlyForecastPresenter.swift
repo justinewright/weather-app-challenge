@@ -14,8 +14,20 @@ class HourlyForecastPresenter: ViewToPresenterHourlyForecastProtocol {
     var view: PresenterToViewHourlyForecastProtocol?
     var interactor: PresenterToInteractorHourlyForecastProtocol?
     var router: PresenterToRouterHourlyForecastProtocol?
+
+    func updateView() {
+        interactor?.fetchCurrentWeather()
+    }
+
 }
 
 extension HourlyForecastPresenter: InteractorToPresenterHourlyForecastProtocol {
+    func fetchedHourlyWeather(hourlyWeather: [HourlyWeather]) {
+        view?.show(theHourlyWeather: hourlyWeather)
+    }
+
+    func fetchedHourlyWeatherFailed(message: String) {
+
+    }
     
 }

@@ -56,7 +56,7 @@ class DetailsCell: UICollectionViewCell, Reusable {
     }()
 
     private lazy var info2HorizontalStackView: UIStackView = {
-        let info2HorizontalStackView = UIStackView(arrangedSubviews: [info1NumberLabel, info1MetricsLabel])
+        let info2HorizontalStackView = UIStackView(arrangedSubviews: [info2NumberLabel, info2MetricsLabel])
         info2HorizontalStackView.axis = .horizontal
         return info2HorizontalStackView
     }()
@@ -134,7 +134,19 @@ class DetailsCell: UICollectionViewCell, Reusable {
             ])
     }
 
-    public func update(dailyWeather: DailyWeather) {
+    public func update(details: Details) {
+        if details.info2 != nil {
+            self.bodyVerticalStack.addArrangedSubview(self.info2HorizontalStackView)
+            self.info2MetricsLabel.text = details.info2unit
+            self.info2NumberLabel.text = details.info2
+        }
+        info1NumberLabel.text = details.info1
+        info1MetricsLabel.text = details.info1unit
+        info1NumberLabel.sizeToFit()
+        
+        headerImageView.image = UIImage(systemName: details.imageName)?.withTintColor(.lightGray)
+      
+        headerTitleLabel.text = details.header
 
     }
 

@@ -11,14 +11,20 @@ import UIKit
 typealias WeatherOverviewSubmodules = (
     locationHeader: UIViewController,
     currentWeather: UIViewController,
-    fiveDayForecast: UIViewController
+    hourlyWeather: UIViewController,
+    fiveDayForecast: UIViewController,
+    detailsView: UIViewController
 )
 
 class WeatherOverviewViewController: UIViewController {
+    // MARK: - Properties
+    var presenter: ViewToPresenterWeatherOverviewProtocol?
     private var submodules: WeatherOverviewSubmodules!
+    private var vStack: UIStackView!
+
     // MARK: - Lifecycle Methods
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewWillAppear(false)
         setupView()
     }
 
@@ -28,7 +34,9 @@ class WeatherOverviewViewController: UIViewController {
         submodules = (
             locationHeader: weatherOverviewSubmodules.locationHeader,
             currentWeather: weatherOverviewSubmodules.currentWeather,
-            fiveDayForecast: weatherOverviewSubmodules.fiveDayForecast
+            hourlyWeather: weatherOverviewSubmodules.hourlyWeather,
+            fiveDayForecast: weatherOverviewSubmodules.fiveDayForecast,
+            detailsView: weatherOverviewSubmodules.detailsView
         )
         view.backgroundColor = .black
     }
@@ -37,28 +45,52 @@ class WeatherOverviewViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Properties
-    var presenter: ViewToPresenterWeatherOverviewProtocol?
-
-    private func addSubmodule(_ submodule: UIViewController) {
-        addChild(submodule)
-        self.view.addSubview(submodule.view)
-        submodule.didMove(toParent: self)
-    }
-
     private func setupView() {
-        addSubmodule(submodules.locationHeader)
-        addSubmodule(submodules.currentWeather)
-        addSubmodule(submodules.fiveDayForecast)
-
+        initVerticalStackView(views: [BaseView(titleText: "現\r\n在",
+                                               content: submodules.currentWeather.view),
+                                      BaseView(titleText: "一\r\n時\r\n間\r\nご\r\nと",
+                                               content: submodules.hourlyWeather.view),
+                                      BaseView(titleText: "五\r\n日\r\n間",
+                                               content: submodules.fiveDayForecast.view),
+                                      BaseView(titleText: "詳\r\n細",
+                                               content: submodules.detailsView.view)])
         setupConstraints()
+        if let fiveDayForecast = submodules.fiveDayForecast as? FiveDayForecastViewController,
+        let delegate = submodules.detailsView as? ForecastCollectionViewDelegate{
+            fiveDayForecast.configure(delegate: delegate)
+        }
+        submodules.currentWeather.view.makeMediumView(anchorTo: view)
+        submodules.hourlyWeather.view.makeMediumView(anchorTo: view)
+        submodules.fiveDayForecast.view.makeMediumView(anchorTo: view)
+        submodules.detailsView.view.makeLargeView(anchorTo: view)
+
+        view.addSubview(submodules.locationHeader.view)
+        addChild(submodules.locationHeader)
+        submodules.locationHeader.willMove(toParent: self)
+        setupLocationHeaderViewConstraints()
+        
         applyStyle()
     }
 
+    private func initVerticalStackView(views: [UIView]) {
+        vStack = UIStackView(arrangedSubviews: views)
+        vStack.axis = .vertical
+        vStack.distribution = .fill
+        vStack.spacing = 10
+        vStack.alignment = .center
+        vStack.isLayoutMarginsRelativeArrangement = true
+        vStack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom:0, trailing: 0)
+        vStack.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        view.addSubview(vStack)
+    }
+
     private func setupConstraints() {
-        setupLocationHeaderViewConstraints()
-        setupCurrentWeatherViewConstraints()
-        setupForecastViewConstraints()
+        let bottomAnchorr = vStack.arrangedSubviews.isEmpty ? view.topAnchor : vStack.arrangedSubviews.last?.bottomAnchor
+        vStack.translatesAutoresizingMaskIntoConstraints = false
+        vStack.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        vStack.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        vStack.bottomAnchor.constraint(equalTo: bottomAnchorr!).isActive = true
+        vStack.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
     }
 
     private func setupLocationHeaderViewConstraints() {
@@ -70,28 +102,6 @@ class WeatherOverviewViewController: UIViewController {
             locationHeaderView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             locationHeaderView.heightAnchor.constraint(equalToConstant: 42),
             locationHeaderView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
-        ])
-    }
-
-    private func setupCurrentWeatherViewConstraints() {
-        let currentWeatherView = submodules.currentWeather.view!
-        currentWeatherView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            currentWeatherView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-            currentWeatherView.topAnchor.constraint(equalTo: self.submodules.locationHeader.view.bottomAnchor, constant: 0),
-            currentWeatherView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
-            currentWeatherView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height )
-        ])
-    }
-
-    private func setupForecastViewConstraints() {
-        let forecastView = submodules.fiveDayForecast.view!
-        forecastView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            forecastView.heightAnchor.constraint(greaterThanOrEqualToConstant: 226),
-            forecastView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -40),
-            forecastView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            forecastView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0)
         ])
     }
 

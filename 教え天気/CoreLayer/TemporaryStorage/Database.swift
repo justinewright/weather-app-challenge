@@ -25,7 +25,7 @@ class Database {
 
     // MARK: - Initialization
     private init() {
-//        bindUpdate()
+        bindUpdate()
 //        updateData()
     }
 
@@ -47,6 +47,7 @@ class Database {
                 weatherRepositoriesLoadedCount += 1
                 addedLocations.append(repoIsLoadedPub.address)
                 if allHaveReposLoaded {
+                    updatePublisher = true
                     loaded.send(true)
                 }
             })
@@ -123,6 +124,12 @@ private extension Database {
         }
     }
 
-    private var allHaveReposLoaded: Bool {weatherRepositoriesLoadedCount == AddressRepository.shared.addresses.count}
+    private var allHaveReposLoaded: Bool {
+#if targetEnvironment(simulator)
+        return weatherRepositoriesLoadedCount == AddressRepository.shared.addresses.count - 1
+#else
+        return weatherRepositoriesLoadedCount == AddressRepository.shared.addresses.count
+#endif
 
+    }
 }

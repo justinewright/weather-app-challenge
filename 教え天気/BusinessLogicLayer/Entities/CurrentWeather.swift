@@ -12,6 +12,8 @@ struct CurrentWeather {
     let minTemperature: Double
     let maxTemperature: Double
     let icon: String
+    let descriptionString: String
+
     let currentWeatherString: String = "現\r\n在"
 
     var conditionName: String {
@@ -53,5 +55,6 @@ struct CurrentWeather {
         minTemperature = dailyWeather.temp.min
         maxTemperature = dailyWeather.temp.max
         icon = currentWeather.weather[0].icon
+        descriptionString = currentWeather.weather[0].description
     }
 }

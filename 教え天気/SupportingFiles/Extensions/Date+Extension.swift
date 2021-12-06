@@ -24,6 +24,13 @@ extension Date {
         return dateFormatter.string(from: date)
     }
 
+    func hour(unixTime: Double) -> String {
+        let date = Date(timeIntervalSince1970: unixTime)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "hh:mm"
+        return dateFormatter.string(from: date)
+    }
+
     var todaysWeekDay: String {
         let date = Date()
         let dateFormatter = DateFormatter()

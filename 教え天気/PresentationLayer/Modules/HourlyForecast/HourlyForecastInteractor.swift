@@ -7,9 +7,34 @@
 //
 
 import Foundation
+import Combine
 
 class HourlyForecastInteractor: PresenterToInteractorHourlyForecastProtocol {
-
     // MARK: Properties
     var presenter: InteractorToPresenterHourlyForecastProtocol?
+    private var repo: WeatherEntitiesRepositoryHourlyWeatherPublisher
+    private var hourlyWeather: [HourlyWeather] = []
+    private var cancellables: Set<AnyCancellable> = []
+
+    // MARK: - Initialization
+    init(repo: WeatherEntitiesRepositoryHourlyWeatherPublisher) {
+        self.repo = repo
+        bindCurrentHourlyPublisher()
+    }
+
+    func fetchCurrentWeather() {
+        presenter?.fetchedHourlyWeather(hourlyWeather: hourlyWeather)
+    }
+
+    private func bindCurrentHourlyPublisher() {
+        repo.hourlyWeatherPub()
+            .sink(receiveValue: { hourlyWeather in
+                DispatchQueue.main.async {
+                    self.hourlyWeather = hourlyWeather
+                    self.presenter?.fetchedHourlyWeather(hourlyWeather: self.hourlyWeather)
+                }
+
+            }).store(in: &cancellables)
+
+    }
 }

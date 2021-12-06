@@ -12,6 +12,7 @@ import Combine
 class WeatherEntitiesRepository {
 
     @Published private(set) var loadedPublisher: Bool = false
+    @Published private var hourlyWeatherPublisher: [HourlyWeather] = []
     @Published private var currentWeatherPublisher: CurrentWeather
     @Published private var dailyWeatherForecastPublisher: [DailyWeather] = []
     private let loaded = PassthroughSubject<Bool, Never>()
@@ -27,6 +28,7 @@ class WeatherEntitiesRepository {
     init(weatherApiClient: WeatherApiClientProtocol = OpenWeatherMapsOneCallApiClient(), address: String, lat: Double, lon: Double) {
         self.weatherApiClient = weatherApiClient
         currentWeatherPublisher = CurrentWeather(dailyWeather: defaultDailyData.first!, currentWeather: defaultCurrentData)
+
         setupBindings()
         weatherApiClient.fetch(long: lon, lat: lat)
         self.address = address
@@ -42,9 +44,11 @@ class WeatherEntitiesRepository {
         weatherApiClient.listen()
             .sink { weatherData in
                 self.currentWeatherPublisher = CurrentWeather(dailyWeather: weatherData.daily.first!, currentWeather: weatherData.current)
-                self.dailyWeatherForecastPublisher = weatherData.daily.compactMap(DailyWeather.init)
+                let timeZone = weatherData.timezone
+                self.dailyWeatherForecastPublisher = weatherData.daily.map { DailyWeather(dailyWeather: $0, timeZone: timeZone) }
+                self.hourlyWeatherPublisher = weatherData.hourly.map { HourlyWeather(hourlyWeather: $0, timeZone: timeZone) }
                 self.publish(weatherData: weatherData)
-                
+
             }.store(in: &cancellables)
 
         loaded
@@ -92,5 +96,12 @@ extension WeatherEntitiesRepository: WeatherEntitiesRepositoryDailyForecastWeath
 extension WeatherEntitiesRepository: WeatherEntitiesRepositoryAddressProtocol {
     func fetch() -> String {
         return address
+    }
+}
+
+extension WeatherEntitiesRepository: WeatherEntitiesRepositoryHourlyWeatherPublisher {
+    func hourlyWeatherPub() -> AnyPublisher<[HourlyWeather], Never> {
+        $hourlyWeatherPublisher
+            .eraseToAnyPublisher()
     }
 }

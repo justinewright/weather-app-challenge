@@ -7,9 +7,8 @@
 //
 
 import Foundation
+import Combine
 
 class WeatherDetailsInteractor: PresenterToInteractorWeatherDetailsProtocol {
-
-    // MARK: Properties
     var presenter: InteractorToPresenterWeatherDetailsProtocol?
 }

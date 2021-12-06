@@ -33,11 +33,12 @@ struct DailyWeather {
     var minTemperature: Double = 0
     var maxTemperature: Double = 0
 
-    var rain: Double = 0
+    var rain: Double? = 0
     var humidity: Double = 0
     var windSpeed: Double = 0
     var windDirection: Double = 0
     var pressure: Double = 0
+    let timeZone: String 
 
     let icon: String
     var dayOfWeekEnglish: String = ""
@@ -58,15 +59,19 @@ struct DailyWeather {
         "Sun":"日\r\n曜\r\n日"
     ]
 
-    init(dailyWeather: Daily) {
+    init(dailyWeather: Daily, timeZone: String = "") {
         self.minTemperature = dailyWeather.temp.min
         self.maxTemperature = dailyWeather.temp.max
         self.sunriseTime = dailyWeather.sunrise
         self.sunsetTime = dailyWeather.sunset
         self.rain = dailyWeather.rain
-        self.humidity = dailyWeather.humidty
+        self.humidity = dailyWeather.humidity
         self.pressure = dailyWeather.pressure
-
+        self.windSpeed = dailyWeather.wind_speed
+        self.windDirection = dailyWeather.wind_deg
+        self.dayOfWeekEnglish = Date().weekDay(unixTime: Double(dailyWeather.dt))
+        self.dayOfWeekJapanese = weekdaysJapanese[dayOfWeekEnglish]!
+        self.timeZone = timeZone
         icon = dailyWeather.weather[0].icon
     }
 }
