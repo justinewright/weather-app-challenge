@@ -22,12 +22,14 @@ class WeatherOverviewView: UIViewController {
     init(usingSubmoduleViews weatherSubmodules: WeatherOverviewSubmodulesViews) {
         super.init(nibName: nil, bundle: nil)
         let location = weatherSubmodules.locationHeader
-        let current = weatherSubmodules.currentWeather
-        let hourly = weatherSubmodules.hourlyWeather
-        let forecast = weatherSubmodules.fiveDayForecast
-        let details = weatherSubmodules.detailsView
-        initVerticalStackView(views: [location, current, hourly, forecast, details])
+
+        let current = BaseView(titleText: "現\r\n在", content: weatherSubmodules.currentWeather)
+        let hourly = BaseView(titleText: "一\r\n時\r\n間\r\nご\r\nと", content: weatherSubmodules.hourlyWeather)
+        let forecast = BaseView(titleText: "五\r\n日\r\n間", content: weatherSubmodules.fiveDayForecast)
+        let details = BaseView(titleText: "詳\r\n細", content: weatherSubmodules.detailsView)
         setupSubmoduleConstraints(current, forecast, hourly, details)
+
+        initVerticalStackView(views: [location, current, hourly, forecast, details])
     }
 
     required init?(coder: NSCoder) {
@@ -62,10 +64,6 @@ class WeatherOverviewView: UIViewController {
     }
 
     fileprivate func setupSubmoduleConstraints(_ current: UIView, _ forecast: UIView, _ hourly: UIView, _ details: UIView) {
-        current.translatesAutoresizingMaskIntoConstraints = false
-        forecast.translatesAutoresizingMaskIntoConstraints = false
-        hourly.translatesAutoresizingMaskIntoConstraints = false
-        details.translatesAutoresizingMaskIntoConstraints = false
         current.makeLargeView(anchorTo: view)
         hourly.makeMediumView(anchorTo: view)
         forecast.makeMediumView(anchorTo: view)

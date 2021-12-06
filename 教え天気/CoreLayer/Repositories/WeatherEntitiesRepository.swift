@@ -29,7 +29,6 @@ class WeatherEntitiesRepository {
         self.weatherApiClient = weatherApiClient
         currentWeatherPublisher = CurrentWeather(dailyWeather: defaultDailyData.first!, currentWeather: defaultCurrentData)
 
-
         setupBindings()
         weatherApiClient.fetch(long: lon, lat: lat)
         self.address = address
@@ -46,8 +45,10 @@ class WeatherEntitiesRepository {
             .sink { weatherData in
                 self.currentWeatherPublisher = CurrentWeather(dailyWeather: weatherData.daily.first!, currentWeather: weatherData.current)
                 self.dailyWeatherForecastPublisher = weatherData.daily.compactMap(DailyWeather.init)
+                let timeZone = weatherData.timezone
+                self.hourlyWeatherPublisher = weatherData.hourly.map { HourlyWeather(hourlyWeather: $0, timeZone: timeZone) }
                 self.publish(weatherData: weatherData)
-                
+
             }.store(in: &cancellables)
 
         loaded

@@ -28,12 +28,18 @@ class LocationsWeatherOverviewInteractor: PresenterToInteractorLocationsWeatherO
     func setupBindings() {
         let db = databaseRefreshInteractor
         db.refreshPub()
+            .receive(on: DispatchQueue.main)
+            .subscribe(on: DispatchQueue.global())
             .sink(receiveValue: { isDataFetched in
                 if !isDataFetched {
                     return
                 }
-                self.presenter?.fetchedPages(repos: self.databaseRepositoryInteractor.fetchWeatherEntitiesRepositories())
-            }).store(in: &cancellables)
+                DispatchQueue.main.async {
+                    self.presenter?.fetchedPages(repos: self.databaseRepositoryInteractor.fetchWeatherEntitiesRepositories())
+                }
+
+            })
+            .store(in: &cancellables)
     }
 
     func fetchPages() {

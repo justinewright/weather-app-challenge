@@ -17,7 +17,8 @@ class LocationsWeatherOverviewRouter: PresenterToRouterLocationsWeatherOverviewP
         let viewController = LocationsWeatherOverviewViewController()
         
         let presenter: ViewToPresenterLocationsWeatherOverviewProtocol & InteractorToPresenterLocationsWeatherOverviewProtocol = LocationsWeatherOverviewPresenter()
-        
+
+        viewController.title = "mmooo"
         viewController.presenter = presenter
         viewController.presenter?.router = LocationsWeatherOverviewRouter()
         viewController.presenter?.view = viewController

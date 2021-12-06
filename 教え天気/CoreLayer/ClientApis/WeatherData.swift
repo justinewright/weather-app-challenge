@@ -10,6 +10,7 @@ import Foundation
 struct WeatherData: Codable {
     let lat: Double
     let lon: Double
+    let timezone: String
     let daily: [Daily]
     let current: Current
     let hourly: [Hourly]
@@ -34,14 +35,15 @@ struct Daily: Codable {
     let temp: Temperature
     let weather: [Weather]
     let pressure: Double
-    let humidty: Double
+    let humidity: Double
     let wind_speed: Double
     let wind_deg: Double
-    let rain: Double
+    let rain: Double?
 }
 
 struct Weather: Codable {
     let icon: String
+    let description: String
 }
 
 struct Temperature: Codable {

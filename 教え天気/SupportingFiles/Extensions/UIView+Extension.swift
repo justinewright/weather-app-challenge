@@ -12,7 +12,7 @@ extension UIView {
     func makeLargeView(anchorTo view: UIView) {
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9)
+            widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8)
             ,
             heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.25)
             ]
@@ -22,7 +22,7 @@ extension UIView {
     func makeMediumView(anchorTo view: UIView) {
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9)
+            widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8)
             ,
             heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.13)
             ]
@@ -33,9 +33,9 @@ extension UIView {
     func makeSmallView(anchorTo view: UIView) {
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.7)
+            widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.8)
             ,
-            heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.7)
+            heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.07)
             ]
 
         )

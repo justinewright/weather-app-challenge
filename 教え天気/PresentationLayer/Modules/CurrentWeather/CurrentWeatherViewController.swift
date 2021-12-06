@@ -18,11 +18,11 @@ class CurrentWeatherViewController: UIViewController {
     
     // MARK: - Properties
     var presenter: ViewToPresenterCurrentWeatherProtocol?
-    private var currentWeatherView: CustomCurrentWeatherView!
+    private var currentWeatherView: CurrentWeatherView!
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        currentWeatherView = CustomCurrentWeatherView()
+        currentWeatherView = CurrentWeatherView()
     }
 
     required init?(coder: NSCoder) {
@@ -47,9 +47,8 @@ class CurrentWeatherViewController: UIViewController {
 
 extension CurrentWeatherViewController: PresenterToViewCurrentWeatherProtocol{
     func showCurrentWeather(withCurrentWeather currentWeather: CurrentWeather) {
-        DispatchQueue.main.async {
-            self.currentWeatherView.update(currentWeather: currentWeather)
-        }
+        self.currentWeatherView.update(currentWeather: currentWeather)
+
     }
 
     // TODO: Implement View Output Methods

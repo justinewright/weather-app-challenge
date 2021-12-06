@@ -9,21 +9,38 @@
 import UIKit
 
 class HourlyForecastViewController: UIViewController {
-//    lazy var collectionView = ReusableCollectionView()
-//    let dataSource = HourlyForecastDataSource()
+    // MARK: - Properties
+    private var hourlyWeatherView: HourlyWeatherView!
+    var presenter: ViewToPresenterHourlyForecastProtocol?
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        hourlyWeatherView = HourlyWeatherView()
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
-//
-//        dataSource.config(data: defaultHourlyData.map {HourlyWeather(hourlyWeather: $0, timeZone: defaultTimeZone)})
         super.viewDidLoad()
+        setupView()
+    }
+    private func setupView() {
+        self.view = hourlyWeatherView
+        setupConstraints()
     }
 
-    // MARK: - Properties
-    var presenter: ViewToPresenterHourlyForecastProtocol?
-    
+    private func setupConstraints() {
+        self.hourlyWeatherView.translatesAutoresizingMaskIntoConstraints = false
+        hourlyWeatherView.edgeTo(view: self.view)
+
+    }
 }
 
 extension HourlyForecastViewController: PresenterToViewHourlyForecastProtocol{
+    func show(theHourlyWeather hourlyWeather: [HourlyWeather]) {
+        self.hourlyWeatherView.update(withHourlyWeather: hourlyWeather)
+    }
+
     // TODO: Implement View Output Methods
 }

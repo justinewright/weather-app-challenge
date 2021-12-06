@@ -22,9 +22,7 @@ class HourlyForecastDataSource: NSObject, UICollectionViewDataSource {
     }
 
     func config(data: [HourlyWeather]) {
-        DispatchQueue.main.async { [self] in
-            hourlyData = data
-        }
+        hourlyData = data
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {

@@ -42,6 +42,7 @@ class LocationsWeatherOverviewPageController: UIPageViewController {
             if pages.isEmpty {
                 return
             }
+            self.view.isUserInteractionEnabled = pages.count > 1
             self.pages = pages
             self.setViewControllers([self.pages[UIPageControl.sharedCurrentPage]], direction: .forward, animated: true, completion: nil)
             self.dataSource = nil

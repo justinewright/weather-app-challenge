@@ -13,7 +13,7 @@ class HourlyForecastInteractor: PresenterToInteractorHourlyForecastProtocol {
     // MARK: Properties
     var presenter: InteractorToPresenterHourlyForecastProtocol?
     private var repo: WeatherEntitiesRepositoryHourlyWeatherPublisher
-    private var hourlyWeather: [HourlyWeather]
+    private var hourlyWeather: [HourlyWeather] = []
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Initialization
@@ -29,8 +29,11 @@ class HourlyForecastInteractor: PresenterToInteractorHourlyForecastProtocol {
     private func bindCurrentHourlyPublisher() {
         repo.hourlyWeatherPub()
             .sink(receiveValue: { hourlyWeather in
-                self.hourlyWeather = hourlyWeather
-                self.presenter?.fetchedCurrentWeather(currentWeather:  self.hourlyWeather)
+                DispatchQueue.main.async {
+                    self.hourlyWeather = hourlyWeather
+                    self.presenter?.fetchedHourlyWeather(hourlyWeather: self.hourlyWeather)
+                }
+
             }).store(in: &cancellables)
 
     }

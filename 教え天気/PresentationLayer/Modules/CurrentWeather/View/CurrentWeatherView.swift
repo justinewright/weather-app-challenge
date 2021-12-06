@@ -28,6 +28,13 @@ final class CurrentWeatherView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func update(currentWeather: CurrentWeather) {
+        highTemperatureLabel.text = currentWeather.maxTemperature.toCelcius
+        lowTemperatureLabel.text = currentWeather.minTemperature.toCelcius
+        currentTemperatureLabel.text = currentWeather.temperature.toCelcius
+        descriptionLabel.text = currentWeather.descriptionString
+        updateImageView(withImage: currentWeather.backgroundName)
+    }
     // MARK: - Views
 
     private func setupView() {
@@ -40,8 +47,8 @@ final class CurrentWeatherView: UIView {
         setupConstraints()
     }
 
-    private func setupImageView() {
-        let image = UIImage(named: "rain")!
+    private func updateImageView(withImage imageName: String = "rain") {
+        let image = UIImage(named: imageName) ?? UIImage(named: "rain")!
         let mask = UIImage(named: "character")!
         let size = image.size
 
@@ -52,6 +59,10 @@ final class CurrentWeatherView: UIView {
             mask.draw(in: CGRect(origin: .zero, size: size), blendMode: .destinationIn, alpha: 1)
         }
         characterMask = UIImageView(image: newImage)
+    }
+
+    private func setupImageView() {
+        updateImageView()
         characterMask.contentMode = .scaleAspectFit
         addSubview(characterMask)
     }
@@ -107,7 +118,7 @@ final class CurrentWeatherView: UIView {
 
         NSLayoutConstraint.activate([
             characterMask.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 20),
-            characterMask.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.4),
+            characterMask.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3),
             characterMask.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }

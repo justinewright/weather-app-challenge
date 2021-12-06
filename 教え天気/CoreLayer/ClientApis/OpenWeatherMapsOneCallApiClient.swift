@@ -14,10 +14,10 @@ class OpenWeatherMapsOneCallApiClient: WeatherApiClientProtocol {
     private let apiURL = "https://api.openweathermap.org/data/2.5/onecall"
     private let appIDParam = "appid=cc6410932cff63f7d50d5c52d6ea4903"
     private let unitsParam = "units=metric"
-    private let excludeParams = "exclude=hourly,minutely,alerts"
+    private let excludeParams = "exclude=alerts"
 
     init() {
-        weatherData = WeatherData(lat: 0, lon: 0, daily: defaultDailyData, current: defaultCurrentData, hourly: defaultHourlyData)
+        weatherData = WeatherData(lat: 0, lon: 0, timezone: "", daily: defaultDailyData, current: defaultCurrentData, hourly: defaultHourlyData)
     }
 
     func fetch(long: Double, lat: Double) {
@@ -37,11 +37,13 @@ class OpenWeatherMapsOneCallApiClient: WeatherApiClientProtocol {
                     return element.data
                 }
                 .decode(type: WeatherData.self, decoder: JSONDecoder())
+                .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { error in
                     print("Subscription completed with error \(error)")
                 }, receiveValue: { self.weatherData = $0 }
                 )
                 .store(in: &cancellables)
+
             }
 
     }
@@ -61,28 +63,28 @@ var defaultWeatherData: WeatherData {
     let current = defaultCurrentData
     let hourly = defaultHourlyData
 
-    return WeatherData(lat: 0, lon: 0, daily: daily, current: current, hourly: hourly)
+    return WeatherData(lat: 0, lon: 0, timezone: "", daily: daily, current: current, hourly: hourly)
 }
 
 var defaultDailyData: [Daily] {
     var daily: [Daily] = []
     for _ in 0..<5 {
         let temperature = Temperature(day: 0, min: 0, max: 0)
-        let weather = [Weather(icon: "-1")]
-        let newDailyElement = (Daily(dt: 0, sunrise: 0, sunset: 0, temp: temperature, weather: weather, pressure: 0, humidty: 0, wind_speed: 0, wind_deg: 0, rain: 0 ))
+        let weather = [Weather(icon: "-1", description: "-")]
+        let newDailyElement = (Daily(dt: 0, sunrise: 0, sunset: 0, temp: temperature, weather: weather, pressure: 0, humidity: 0, wind_speed: 0, wind_deg: 0, rain: 0 ))
         daily.append(newDailyElement)
     }
     return daily
 }
 
 var defaultCurrentData: Current {
-    return Current(dt: 0, temp: 0, weather: [Weather(icon: "-1")])
+    return Current(dt: 0, temp: 0, weather: [Weather(icon: "-1", description: "-")])
 }
 
 var defaultHourlyData: [Hourly] {
     var hourly: [Hourly] = []
     for _ in 0..<24 {
-        let newElement = Hourly(dt: 0, temp: 0, weather: [Weather(icon: "-1")])
+        let newElement = Hourly(dt: 0, temp: 0, weather: [Weather(icon: "-1", description: "")])
         hourly.append(newElement)
     }
     return hourly

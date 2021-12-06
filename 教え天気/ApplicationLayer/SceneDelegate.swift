@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 //        initialViewController = RainMapRouter.createModule()
 //        initialViewController = MainRouter.createModule()
-        initialViewController = ViewController()
+        initialViewController = MainRouter.createModule()
         _ = Database.shared
         _ = LocationTracker.shared
         
