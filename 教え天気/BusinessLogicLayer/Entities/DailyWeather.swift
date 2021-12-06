@@ -68,6 +68,8 @@ struct DailyWeather {
         self.pressure = dailyWeather.pressure
         self.windSpeed = dailyWeather.wind_speed
         self.windDirection = dailyWeather.wind_deg
+        self.dayOfWeekEnglish = Date().weekDay(unixTime: Double(dailyWeather.dt))
+        self.dayOfWeekJapanese = weekdaysJapanese[dayOfWeekEnglish]!
         icon = dailyWeather.weather[0].icon
     }
 }

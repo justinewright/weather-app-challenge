@@ -151,6 +151,7 @@ private extension ForecastCell {
     private func setupEnglishWeekdayLabel() {
         englishWeekdayLabel = UILabel().SystemFont8.White
         englishWeekdayLabel.text = defaultEngWeekdayString
+        englishWeekdayLabel.minimumScaleFactor = 0.3
         self.addSubview(englishWeekdayLabel)
     }
 
@@ -158,7 +159,7 @@ private extension ForecastCell {
         englishWeekdayLabel.translatesAutoresizingMaskIntoConstraints = false
         englishWeekdayLabel.sizeToFit()
         NSLayoutConstraint.activate([
-            englishWeekdayLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            englishWeekdayLabel.centerXAnchor.constraint(equalTo: centerXAnchor, constant: -distanceToCenter * ratio),
             englishWeekdayLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
@@ -167,6 +168,7 @@ private extension ForecastCell {
         japaneseWeekdayLabel = UILabel().SystemFont8.White
         japaneseWeekdayLabel.numberOfLines = 0
         japaneseWeekdayLabel.text = defaultJapWeekdayString
+        japaneseWeekdayLabel.minimumScaleFactor = 0.3
         self.addSubview(japaneseWeekdayLabel)
     }
 
