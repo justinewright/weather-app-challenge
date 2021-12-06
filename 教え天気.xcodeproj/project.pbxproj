@@ -34,6 +34,7 @@
 		21758CDB26E52A5200307629 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 21758CDA26E52A5200307629 /* .swiftlint.yml */; };
 		21758CDC26E52A5200307629 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 21758CDA26E52A5200307629 /* .swiftlint.yml */; };
 		217FA66026FA3B0100F9A9ED /* NavigationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217FA65F26FA3B0100F9A9ED /* NavigationBuilder.swift */; };
+		2180CB47275EA46F00F8E9A7 /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2180CB46275EA46E00F8E9A7 /* Details.swift */; };
 		2181875F2705E53200011769 /* WeatherDetailsContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181875A2705E53200011769 /* WeatherDetailsContract.swift */; };
 		218187602705E53200011769 /* WeatherDetailsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181875B2705E53200011769 /* WeatherDetailsPresenter.swift */; };
 		218187612705E53200011769 /* WeatherDetailsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181875C2705E53200011769 /* WeatherDetailsRouter.swift */; };
@@ -142,6 +143,7 @@
 		2174358526E11547007A0A60 /* mockData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = mockData.json; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.json; };
 		21758CDA26E52A5200307629 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		217FA65F26FA3B0100F9A9ED /* NavigationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBuilder.swift; sourceTree = "<group>"; };
+		2180CB46275EA46E00F8E9A7 /* Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
 		2181875A2705E53200011769 /* WeatherDetailsContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailsContract.swift; sourceTree = "<group>"; };
 		2181875B2705E53200011769 /* WeatherDetailsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailsPresenter.swift; sourceTree = "<group>"; };
 		2181875C2705E53200011769 /* WeatherDetailsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailsRouter.swift; sourceTree = "<group>"; };
@@ -584,6 +586,7 @@
 				2186DE1626F49E54000F920D /* CurrentWeather.swift */,
 				2186DE1726F49E54000F920D /* DailyWeather.swift */,
 				216754A1270460B000EC2FA5 /* HourlyWeather.swift */,
+				2180CB46275EA46E00F8E9A7 /* Details.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -839,6 +842,7 @@
 				2186DE5C26F49E54000F920D /* UserDefaults+Extension.swift in Sources */,
 				2167549A27045F1000EC2FA5 /* HourlyForecastPresenter.swift in Sources */,
 				2186DE3626F49E54000F920D /* FiveDayForecastContract.swift in Sources */,
+				2180CB47275EA46F00F8E9A7 /* Details.swift in Sources */,
 				2186DE5126F49E54000F920D /* MainPresenter.swift in Sources */,
 				2167549B27045F1000EC2FA5 /* HourlyForecastRouter.swift in Sources */,
 				2186DE2B26F49E54000F920D /* WeatherOverviewViewController.swift in Sources */,

@@ -23,6 +23,13 @@ final class DetailsWeatherView: UIView {
         collectionView.refresh()
     }
 
+    func configure(withDailyWeather dailyWeather: DailyWeather) {
+        DispatchQueue.main.async {
+            self.dataSource.config(data: dailyWeather)
+            self.collectionView.refresh()
+        }
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

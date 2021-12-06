@@ -12,10 +12,12 @@ class HourlyForecastViewController: UIViewController {
     // MARK: - Properties
     private var hourlyWeatherView: HourlyWeatherView!
     var presenter: ViewToPresenterHourlyForecastProtocol?
+
     init() {
         super.init(nibName: nil, bundle: nil)
         hourlyWeatherView = HourlyWeatherView()
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -25,6 +27,7 @@ class HourlyForecastViewController: UIViewController {
         super.viewDidLoad()
         setupView()
     }
+
     private func setupView() {
         self.view = hourlyWeatherView
         setupConstraints()

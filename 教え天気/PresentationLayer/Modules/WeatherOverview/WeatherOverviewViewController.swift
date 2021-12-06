@@ -55,7 +55,10 @@ class WeatherOverviewViewController: UIViewController {
                                       BaseView(titleText: "詳\r\n細",
                                                content: submodules.detailsView.view)])
         setupConstraints()
-
+        if let fiveDayForecast = submodules.fiveDayForecast as? FiveDayForecastViewController,
+        let delegate = submodules.detailsView as? ForecastCollectionViewDelegate{
+            fiveDayForecast.configure(delegate: delegate)
+        }
         submodules.currentWeather.view.makeMediumView(anchorTo: view)
         submodules.hourlyWeather.view.makeMediumView(anchorTo: view)
         submodules.fiveDayForecast.view.makeMediumView(anchorTo: view)

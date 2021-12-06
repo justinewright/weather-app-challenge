@@ -26,5 +26,21 @@ class WeatherDetailsRouter: PresenterToRouterWeatherDetailsProtocol {
         
         return viewController
     }
+
+    static func createModule(repo: WeatherEntitiesRepository) -> UIViewController {
+
+        let viewController = WeatherDetailsViewController()
+
+        let presenter: ViewToPresenterWeatherDetailsProtocol & InteractorToPresenterWeatherDetailsProtocol = WeatherDetailsPresenter()
+
+        viewController.presenter = presenter
+        viewController.presenter?.router = WeatherDetailsRouter()
+        viewController.presenter?.view = viewController
+        viewController.presenter?.interactor = WeatherDetailsInteractor()
+        viewController.presenter?.interactor?.presenter = presenter
+
+
+        return viewController
+    }
     
 }

@@ -9,7 +9,7 @@
 import UIKit
 
 class FiveDayForecastViewController: UIViewController {
-    
+
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +24,6 @@ class FiveDayForecastViewController: UIViewController {
     // MARK: - Initialization
     init() {
         super.init(nibName: nil, bundle: nil)
-        forecastCollectionView = ForecastCollectionView()
     }
 
     required init?(coder: NSCoder) {
@@ -33,7 +32,7 @@ class FiveDayForecastViewController: UIViewController {
 
     // MARK: - Properties
     var presenter: ViewToPresenterFiveDayForecastProtocol?
-    private var forecastCollectionView: ForecastCollectionView!
+    private lazy var forecastCollectionView = ForecastCollectionView()
     private var fiveDayDailyforecast: [DailyWeather]!
 
     private func setupView() {
@@ -50,7 +49,11 @@ class FiveDayForecastViewController: UIViewController {
             forecastCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
+
+    func configure(delegate: ForecastCollectionViewDelegate) {
+        forecastCollectionView.configure(delegate: delegate)
+    }
+
 }
 
 extension FiveDayForecastViewController: PresenterToViewFiveDayForecastProtocol {

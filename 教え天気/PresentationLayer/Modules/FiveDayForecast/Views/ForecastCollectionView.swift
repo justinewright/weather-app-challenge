@@ -7,11 +7,16 @@
 
 import UIKit
 
+protocol ForecastCollectionViewDelegate {
+    func selectedCellInformation(_ dailyWeather: DailyWeather)
+}
+
 class ForecastCollectionView: UIView {
     private let forecastCellReuseIdentifier = "forecast-cell-reuse-identifier"
     private lazy var collectionView: UICollectionView! = nil
     private var dailyForecast: [DailyWeather] = []
     private var selectedCell: Int = 0
+    private var delegate: ForecastCollectionViewDelegate?
 
     required init() {
         super.init(frame: .zero)
@@ -22,6 +27,9 @@ class ForecastCollectionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func configure(delegate: ForecastCollectionViewDelegate?) {
+        self.delegate = delegate
+    }
     private func setupView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -64,7 +72,6 @@ extension ForecastCollectionView: UICollectionViewDataSource, UICollectionViewDe
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return dailyForecast.isEmpty ? 0 : dailyForecast.first?.icon == "-1" ? 0 : 5
         return dailyForecast.isEmpty ? 0 : 5
     }
 
@@ -72,13 +79,16 @@ extension ForecastCollectionView: UICollectionViewDataSource, UICollectionViewDe
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: forecastCellReuseIdentifier, for: indexPath) as? ForecastCell else {
             return UICollectionViewCell()
         }
-
+        if indexPath.row == 0 { delegate?.selectedCellInformation(dailyForecast[0]) }
         cell.update(dailyWeather: dailyForecast[indexPath.row])
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedCell = indexPath.row
+        DispatchQueue.main.async {
+            self.delegate?.selectedCellInformation(self.dailyForecast[indexPath.row])
+        }
     }
 }
 

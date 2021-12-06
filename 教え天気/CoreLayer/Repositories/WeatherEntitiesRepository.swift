@@ -44,8 +44,8 @@ class WeatherEntitiesRepository {
         weatherApiClient.listen()
             .sink { weatherData in
                 self.currentWeatherPublisher = CurrentWeather(dailyWeather: weatherData.daily.first!, currentWeather: weatherData.current)
-                self.dailyWeatherForecastPublisher = weatherData.daily.compactMap(DailyWeather.init)
                 let timeZone = weatherData.timezone
+                self.dailyWeatherForecastPublisher = weatherData.daily.map { DailyWeather(dailyWeather: $0, timeZone: timeZone) }
                 self.hourlyWeatherPublisher = weatherData.hourly.map { HourlyWeather(hourlyWeather: $0, timeZone: timeZone) }
                 self.publish(weatherData: weatherData)
 

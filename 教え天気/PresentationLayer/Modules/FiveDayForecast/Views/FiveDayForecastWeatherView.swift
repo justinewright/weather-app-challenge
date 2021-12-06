@@ -7,23 +7,29 @@
 
 import UIKit
 
-final class FiveDayForecastWeatherView: UIView {
+class FiveDayForecastWeatherView: UIView {
+    
     private lazy var collectionView = ForecastCollectionView()
+    
     init() {
         super.init(frame: .zero)
 
         setupView()
-        collectionView.refresh(data: defaultDailyData.map(DailyWeather.init))
+
+        collectionView.refresh(data: defaultDailyData.map{DailyWeather(dailyWeather: $0)} )
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func configure(delegate: ForecastCollectionViewDelegate) {
+        collectionView.configure(delegate: delegate)
+    }
+
     private func setupView() {
         addSubview(collectionView)
         setupConstraints()
-
     }
 
     private func setupConstraints() {
@@ -34,6 +40,13 @@ final class FiveDayForecastWeatherView: UIView {
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+    }
+
+}
+
+extension FiveDayForecastWeatherView: ForecastCollectionViewDelegate {
+    func selectedCellInformation(_ dailyWeather: DailyWeather) {
+
     }
 
 }
