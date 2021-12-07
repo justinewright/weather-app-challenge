@@ -12,6 +12,7 @@
 ### Built With
 * Swift 
 * Viper
+* Combine
 * Rest-api
 
 <!-- ROADMAP -->
