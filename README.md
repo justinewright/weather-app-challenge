@@ -7,7 +7,7 @@
 
 
 ## Project Description
-教え天気 is an iOS application. Users can view add locations to a list to view weather.
+教え天気 is an iOS application. Users can add locations to view its weather.
 
 ### Built With
 * Swift 
