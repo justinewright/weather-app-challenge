@@ -15,6 +15,8 @@
 * Combine
 * UIKit
 * Rest-api
+* Core Locations
+* MapKit
 
 <!-- ROADMAP -->
 ## Roadmap
